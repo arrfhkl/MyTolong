@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+    <item
+        android:id="@+id/navigation_dashboard"
+        android:title="Chat"
+        android:icon="@drawable/ic_baseline_chat_24" />
+
+    <item
+        android:id="@+id/navigation_service_order"
+        android:title="Service Order"
+        android:icon="@drawable/ic_service_order" />
+
+    <item
+        android:id="@+id/navigation_add_services"
+        android:title="Add Services"
+        android:icon="@drawable/ic_add_services" />
+
+    <item
+        android:id="@+id/navigation_provider_profile"
+        android:title="Provider Profile"
+        android:icon="@drawable/ic_provider_profile" />
+</menu>

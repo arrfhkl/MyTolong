@@ -1,0 +1,10 @@
+<resources>
+    <string name="app_name">My Tolong</string>
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="hello_blank_fragment">Hello blank fragment</string>
+    <string-array name="service_types">
+        <item>Plumbing</item>
+        <item>Electrical</item>
+        <item>Building</item>
+    </string-array>
+</resources>

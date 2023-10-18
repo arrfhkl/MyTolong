@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- bottom_navigation_menu.xml -->
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+    <item
+        android:id="@+id/navigation_username_login"
+        android:title="User Sign In"
+        android:icon="@drawable/ic_username_login" />
+    <item
+        android:id="@+id/navigation_phone_login"
+        android:title="Provider Sign In"
+        android:icon="@drawable/ic_provider_logo" />
+</menu>
