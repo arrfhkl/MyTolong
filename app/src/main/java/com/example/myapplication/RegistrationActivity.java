@@ -86,66 +86,92 @@ public class RegistrationActivity extends AppCompatActivity {
                 String confirmPassword = confirmPasswordEditText.getText().toString();
 
                 if (validateInput(fullName, email, phone, password, confirmPassword)) {
-                    // Register user with Firebase Authentication
-                    mAuth.createUserWithEmailAndPassword(email, password)
-                            .addOnCompleteListener(RegistrationActivity.this, new OnCompleteListener<AuthResult>() {
-                                @Override
-                                public void onComplete(@NonNull Task<AuthResult> task) {
-                                    if (task.isSuccessful()) {
-                                        FirebaseUser currentUser = mAuth.getCurrentUser();
-                                        if (currentUser != null) {
-                                            String userId = currentUser.getUid();
-                                            @SuppressLint("RestrictedApi") MyAppUser newUser = new MyAppUser(selectedType, companyName, fullName, email, phone);
-                                            databaseReference.child(userId).setValue(newUser);
-
-                                            // Login the user after successful registration
-                                            mAuth.signInWithEmailAndPassword(email, password)
-                                                    .addOnCompleteListener(RegistrationActivity.this, new OnCompleteListener<AuthResult>() {
-                                                        @Override
-                                                        public void onComplete(@NonNull Task<AuthResult> task) {
-                                                            if (task.isSuccessful()) {
-                                                                // Inside your login method, after login is successful
-                                                                Toast.makeText(RegistrationActivity.this, "Registration and login successful!", Toast.LENGTH_SHORT).show();
-                                                                Intent intent = new Intent(RegistrationActivity.this, ProviderLoginFragment.class);
-                                                                startActivity(intent);
-                                                                finish(); // Close the registration activity
-                                                            } else {
-                                                                // Login failed, handle errors
-                                                                Toast.makeText(RegistrationActivity.this, "Login failed. Please try again.", Toast.LENGTH_SHORT).show();
-                                                            }
-                                                        }
-                                                    });
-                                        }
-                                    } else {
-                                        // Registration failed, handle errors
-                                        Toast.makeText(RegistrationActivity.this, "Registration failed. Please try again.", Toast.LENGTH_SHORT).show();
-                                    }
-                                }
-                            });
+                    registerUser(email, password, selectedType, companyName, fullName, phone);
                 }
             }
         });
     }
 
-    // Validation method as in your previous code
     private boolean validateInput(String fullName, String email, String phone, String password, String confirmPassword) {
-        // Validation code here
+        if (fullName.isEmpty() || email.isEmpty() || phone.isEmpty() || password.isEmpty() || confirmPassword.isEmpty()) {
+            // Check if any field is empty
+            Toast.makeText(RegistrationActivity.this, "All fields are required", Toast.LENGTH_SHORT).show();
+            return false;
+        }
+
+        if (!android.util.Patterns.EMAIL_ADDRESS.matcher(email).matches()) {
+            // Check if the email is in a valid format
+            Toast.makeText(RegistrationActivity.this, "Invalid email format", Toast.LENGTH_SHORT).show();
+            return false;
+        }
+
+        if (phone.length() != 10) {
+            // Check if the phone number is 10 digits (you can adjust this as needed)
+            Toast.makeText(RegistrationActivity.this, "Phone number should be 10 digits", Toast.LENGTH_SHORT).show();
+            return false;
+        }
+
+        if (password.length() < 6) {
+            // Check if the password is at least 6 characters long (you can adjust this as needed)
+            Toast.makeText(RegistrationActivity.this, "Password should be at least 6 characters", Toast.LENGTH_SHORT).show();
+            return false;
+        }
+
+        if (!password.equals(confirmPassword)) {
+            // Check if the password and confirm password match
+            Toast.makeText(RegistrationActivity.this, "Passwords do not match", Toast.LENGTH_SHORT).show();
+            return false;
+        }
+
+        // If all checks pass, return true to indicate valid input
         return true;
     }
 
-    // MyAppUser class with getters and setters
-    public class MyAppUser {
+
+    private void registerUser(String email, String password, String selectedType, String companyName, String fullName, String phone) {
+        mAuth.createUserWithEmailAndPassword(email, password)
+                .addOnCompleteListener(this, new OnCompleteListener<AuthResult>() {
+                    @Override
+                    public void onComplete(@NonNull Task<AuthResult> task) {
+                        if (task.isSuccessful()) {
+                            FirebaseUser currentUser = mAuth.getCurrentUser();
+                            if (currentUser != null) {
+                                String userId = currentUser.getUid();
+                                @SuppressLint("RestrictedApi") User newUser = new User(selectedType, companyName, fullName, email, phone);
+                                databaseReference.child(userId).setValue(newUser);
+
+                                // Inside your registerUser method, after registration is successful
+                                Intent intent = new Intent(RegistrationActivity.this, ProviderLoginFragment.class);
+                                startActivity(intent);
+                                finish(); // Close the registration activity
+
+                                // Inside your registerUser method, after registration is successful
+                                Toast.makeText(RegistrationActivity.this, "Registration successful!", Toast.LENGTH_SHORT).show();
+
+
+
+                                // Registration successful
+                                // Redirect or show a success message
+                            }
+                        } else {
+                            // Registration failed, handle errors
+                        }
+                    }
+                });
+    }
+
+    public class User {
         private String userType;
         private String companyName;
         private String fullName;
         private String email;
         private String phone;
 
-        public MyAppUser() {
-            // Default constructor required for Firebase
+        public User() {
+            // Default constructor required for calls to DataSnapshot.getValue(User.class)
         }
 
-        public MyAppUser(String userType, String companyName, String fullName, String email, String phone) {
+        public User(String userType, String companyName, String fullName, String email, String phone) {
             this.userType = userType;
             this.companyName = companyName;
             this.fullName = fullName;
@@ -157,44 +183,22 @@ public class RegistrationActivity extends AppCompatActivity {
             return userType;
         }
 
-        public void setUserType(String userType) {
-            this.userType = userType;
-        }
-
         public String getCompanyName() {
             return companyName;
-        }
-
-        public void setCompanyName(String companyName) {
-            this.companyName = companyName;
         }
 
         public String getFullName() {
             return fullName;
         }
 
-        public void setFullName(String fullName) {
-            this.fullName = fullName;
-        }
-
         public String getEmail() {
             return email;
-        }
-
-        public void setEmail(String email) {
-            this.email = email;
         }
 
         public String getPhone() {
             return phone;
         }
-
-        public void setPhone(String phone) {
-            this.phone = phone;
-        }
     }
+
 }
-
-
-
 
