@@ -28,7 +28,6 @@ public class ProviderLoginFragment extends Fragment {
     private TextView registerTextView;
 
     private FirebaseAuth mAuth;
-    return;
 
     @SuppressLint("MissingInflatedId")
     @Override
