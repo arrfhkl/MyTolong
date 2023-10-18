@@ -27,12 +27,15 @@ public class ProviderLoginFragment extends Fragment {
     private TextView forgotPasswordTextView;
     private TextView registerTextView;
 
-    private FirebaseAuth mAuth;
+    private FirebaseAuth mAuth; // Initialize Firebase Authentication
 
     @SuppressLint("MissingInflatedId")
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_provider_login, container, false);
+
+        // Initialize Firebase Authentication
+        mAuth = FirebaseAuth.getInstance();
 
         emailEditText = view.findViewById(R.id.emailEditText);
         passwordEditText = view.findViewById(R.id.passwordEditText);
@@ -93,6 +96,7 @@ public class ProviderLoginFragment extends Fragment {
         return view;
     }
 }
+
 
 
 
