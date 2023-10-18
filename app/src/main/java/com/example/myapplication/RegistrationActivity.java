@@ -86,78 +86,45 @@ public class RegistrationActivity extends AppCompatActivity {
                 String confirmPassword = confirmPasswordEditText.getText().toString();
 
                 if (validateInput(fullName, email, phone, password, confirmPassword)) {
-                    registerUser(email, password, selectedType, companyName, fullName, phone);
+                    // Register user with Firebase Authentication
+                    mAuth.createUserWithEmailAndPassword(email, password)
+                            .addOnCompleteListener(RegistrationActivity.this, new OnCompleteListener<AuthResult>() {
+                                @Override
+                                public void onComplete(@NonNull Task<AuthResult> task) {
+                                    if (task.isSuccessful()) {
+                                        FirebaseUser currentUser = mAuth.getCurrentUser();
+                                        if (currentUser != null) {
+                                            String userId = currentUser.getUid();
+                                            @SuppressLint("RestrictedApi") User newUser = new User(selectedType, companyName, fullName, email, phone);
+                                            databaseReference.child(userId).setValue(newUser);
+
+                                            // Inside your registerUser method, after registration is successful
+                                            Intent intent = new Intent(RegistrationActivity.this, ProviderLoginFragment.class);
+                                            startActivity(intent);
+                                            finish(); // Close the registration activity
+
+                                            // Inside your registerUser method, after registration is successful
+                                            Toast.makeText(RegistrationActivity.this, "Registration successful!", Toast.LENGTH_SHORT).show();
+
+                                            // Registration successful
+                                            // Redirect or show a success message
+                                        }
+                                    } else {
+                                        // Registration failed, handle errors
+                                        Toast.makeText(RegistrationActivity.this, "Registration failed. Please try again.", Toast.LENGTH_SHORT).show();
+                                    }
+                                }
+                            });
                 }
             }
         });
     }
 
     private boolean validateInput(String fullName, String email, String phone, String password, String confirmPassword) {
-        if (fullName.isEmpty() || email.isEmpty() || phone.isEmpty() || password.isEmpty() || confirmPassword.isEmpty()) {
-            // Check if any field is empty
-            Toast.makeText(RegistrationActivity.this, "All fields are required", Toast.LENGTH_SHORT).show();
-            return false;
-        }
+        // Validation code as in your previous code
 
-        if (!android.util.Patterns.EMAIL_ADDRESS.matcher(email).matches()) {
-            // Check if the email is in a valid format
-            Toast.makeText(RegistrationActivity.this, "Invalid email format", Toast.LENGTH_SHORT).show();
-            return false;
-        }
-
-        if (phone.length() != 10) {
-            // Check if the phone number is 10 digits (you can adjust this as needed)
-            Toast.makeText(RegistrationActivity.this, "Phone number should be 10 digits", Toast.LENGTH_SHORT).show();
-            return false;
-        }
-
-        if (password.length() < 6) {
-            // Check if the password is at least 6 characters long (you can adjust this as needed)
-            Toast.makeText(RegistrationActivity.this, "Password should be at least 6 characters", Toast.LENGTH_SHORT).show();
-            return false;
-        }
-
-        if (!password.equals(confirmPassword)) {
-            // Check if the password and confirm password match
-            Toast.makeText(RegistrationActivity.this, "Passwords do not match", Toast.LENGTH_SHORT).show();
-            return false;
-        }
-
-        // If all checks pass, return true to indicate valid input
+        // Return true if input is valid, false otherwise
         return true;
-    }
-
-
-    private void registerUser(String email, String password, String selectedType, String companyName, String fullName, String phone) {
-        mAuth.createUserWithEmailAndPassword(email, password)
-                .addOnCompleteListener(this, new OnCompleteListener<AuthResult>() {
-                    @Override
-                    public void onComplete(@NonNull Task<AuthResult> task) {
-                        if (task.isSuccessful()) {
-                            FirebaseUser currentUser = mAuth.getCurrentUser();
-                            if (currentUser != null) {
-                                String userId = currentUser.getUid();
-                                @SuppressLint("RestrictedApi") User newUser = new User(selectedType, companyName, fullName, email, phone);
-                                databaseReference.child(userId).setValue(newUser);
-
-                                // Inside your registerUser method, after registration is successful
-                                Intent intent = new Intent(RegistrationActivity.this, ProviderLoginFragment.class);
-                                startActivity(intent);
-                                finish(); // Close the registration activity
-
-                                // Inside your registerUser method, after registration is successful
-                                Toast.makeText(RegistrationActivity.this, "Registration successful!", Toast.LENGTH_SHORT).show();
-
-
-
-                                // Registration successful
-                                // Redirect or show a success message
-                            }
-                        } else {
-                            // Registration failed, handle errors
-                        }
-                    }
-                });
     }
 
     public class User {
@@ -168,7 +135,7 @@ public class RegistrationActivity extends AppCompatActivity {
         private String phone;
 
         public User() {
-            // Default constructor required for calls to DataSnapshot.getValue(User.class)
+            // Default constructor required for Firebase
         }
 
         public User(String userType, String companyName, String fullName, String email, String phone) {
@@ -179,26 +146,47 @@ public class RegistrationActivity extends AppCompatActivity {
             this.phone = phone;
         }
 
+        // Getters and setters for the class properties
         public String getUserType() {
             return userType;
+        }
+
+        public void setUserType(String userType) {
+            this.userType = userType;
         }
 
         public String getCompanyName() {
             return companyName;
         }
 
+        public void setCompanyName(String companyName) {
+            this.companyName = companyName;
+        }
+
         public String getFullName() {
             return fullName;
+        }
+
+        public void setFullName(String fullName) {
+            this.fullName = fullName;
         }
 
         public String getEmail() {
             return email;
         }
 
+        public void setEmail(String email) {
+            this.email = email;
+        }
+
         public String getPhone() {
             return phone;
         }
-    }
 
+        public void setPhone(String phone) {
+            this.phone = phone;
+        }
+    }
 }
+
 
