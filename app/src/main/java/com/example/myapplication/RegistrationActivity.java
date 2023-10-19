@@ -7,16 +7,15 @@ import android.widget.EditText;
 import android.widget.RadioButton;
 import android.widget.RadioGroup;
 import android.widget.Toast;
-import androidx.annotation.NonNull;
+
 import androidx.appcompat.app.AppCompatActivity;
-import com.google.android.gms.tasks.OnCompleteListener;
-import com.google.android.gms.tasks.Task;
+
 import com.google.firebase.FirebaseApp;
-import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
-import com.google.firebase.database.DatabaseReference;
-import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.firestore.DocumentReference;
+import com.google.firebase.firestore.FirebaseFirestore;
+
 
 public class RegistrationActivity extends AppCompatActivity {
 
@@ -31,15 +30,19 @@ public class RegistrationActivity extends AppCompatActivity {
     private EditText confirmPasswordEditText;
     private Button registerButton;
     private FirebaseAuth mAuth;
+    private FirebaseFirestore db;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_registration);
 
+        // Initialize Firebase Authentication
         FirebaseApp.initializeApp(this);
         mAuth = FirebaseAuth.getInstance();
 
+        // Initialize Firebase Firestore
+        db = FirebaseFirestore.getInstance();
 
         radioGroup = findViewById(R.id.radioGroup);
         radioCompany = findViewById(R.id.radioCompany);
@@ -71,27 +74,24 @@ public class RegistrationActivity extends AppCompatActivity {
 
             if (validateInput(fullName, email, phone, password, confirmPassword)) {
                 mAuth.createUserWithEmailAndPassword(email, password)
-                        .addOnCompleteListener(RegistrationActivity.this, task -> {
+                        .addOnCompleteListener(this, task -> {
                             if (task.isSuccessful()) {
+                                // The user has been registered with email and password in Firebase Authentication.
                                 FirebaseUser currentUser = mAuth.getCurrentUser();
                                 if (currentUser != null) {
                                     String userId = currentUser.getUid();
-                                    User newUser = new User(selectedType, companyName, fullName, email, phone);
+                                    User newUser = new User(selectedType, companyName, fullName, phone);
 
-                                    // Get a reference to your Firebase database
-                                    DatabaseReference databaseReference = FirebaseDatabase.getInstance().getReference("users");
-
-                                    // Save the user data to the database
-                                    databaseReference.child(userId).setValue(newUser)
+                                    // Save additional details in Firestore
+                                    DocumentReference userRef = db.collection("users").document(userId);
+                                    userRef.set(newUser)
                                             .addOnSuccessListener(aVoid -> {
-                                                // User data saved successfully
-                                                mAuth.signOut(); // Sign out the user after successful registration
+                                                mAuth.signOut();
                                                 Toast.makeText(RegistrationActivity.this, "Registration successful! You are now signed out.", Toast.LENGTH_SHORT).show();
-                                                finish(); // Close the registration activity
+                                                finish();
                                             })
                                             .addOnFailureListener(e -> {
-                                                // Error occurred while saving user data
-                                                Toast.makeText(RegistrationActivity.this, "Error saving user data. Please try again.", Toast.LENGTH_SHORT).show();
+                                                Toast.makeText(RegistrationActivity.this, "Error saving user data in Firestore. Please try again.", Toast.LENGTH_SHORT).show();
                                             });
                                 }
                             } else {
@@ -104,31 +104,26 @@ public class RegistrationActivity extends AppCompatActivity {
 
     private boolean validateInput(String fullName, String email, String phone, String password, String confirmPassword) {
         if (fullName.isEmpty() || email.isEmpty() || phone.isEmpty() || password.isEmpty() || confirmPassword.isEmpty()) {
-            // Check if any field is empty
             Toast.makeText(RegistrationActivity.this, "All fields are required", Toast.LENGTH_SHORT).show();
             return false;
         }
 
         if (!android.util.Patterns.EMAIL_ADDRESS.matcher(email).matches()) {
-            // Check if the email is in a valid format
             Toast.makeText(RegistrationActivity.this, "Invalid email format", Toast.LENGTH_SHORT).show();
             return false;
         }
 
         if (phone.length() != 10) {
-            // Check if the phone number is 10 digits (you can adjust this as needed)
             Toast.makeText(RegistrationActivity.this, "Phone number should be 10 digits", Toast.LENGTH_SHORT).show();
             return false;
         }
 
         if (password.length() < 6) {
-            // Check if the password is at least 6 characters long (you can adjust this as needed)
             Toast.makeText(RegistrationActivity.this, "Password should be at least 6 characters", Toast.LENGTH_SHORT).show();
             return false;
         }
 
         if (!password.equals(confirmPassword)) {
-            // Check if the password and confirm password match
             Toast.makeText(RegistrationActivity.this, "Password and confirm password do not match", Toast.LENGTH_SHORT).show();
             return false;
         }
@@ -140,62 +135,23 @@ public class RegistrationActivity extends AppCompatActivity {
         private String userType;
         private String companyName;
         private String fullName;
-        private String email;
         private String phone;
 
         public User() {
-            // Default constructor required for Firebase
+            // Default constructor required for Firestore
         }
 
-        public User(String userType, String companyName, String fullName, String email, String phone) {
+        public User(String userType, String companyName, String fullName, String phone) {
             this.userType = userType;
             this.companyName = companyName;
             this.fullName = fullName;
-            this.email = email;
-            this.phone = phone;
-        }
-
-        public String getUserType() {
-            return userType;
-        }
-
-        public void setUserType(String userType) {
-            this.userType = userType;
-        }
-
-        public String getCompanyName() {
-            return companyName;
-        }
-
-        public void setCompanyName(String companyName) {
-            this.companyName = companyName;
-        }
-
-        public String getFullName() {
-            return fullName;
-        }
-
-        public void setFullName(String fullName) {
-            this.fullName = fullName;
-        }
-
-        public String getEmail() {
-            return email;
-        }
-
-        public void setEmail(String email) {
-            this.email = email;
-        }
-
-        public String getPhone() {
-            return phone;
-        }
-
-        public void setPhone(String phone) {
             this.phone = phone;
         }
     }
 }
+
+
+
 
 
 

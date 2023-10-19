@@ -74,9 +74,13 @@
                 android:value="" />
         </activity>
         <activity
-            android:name=".RegistrationActivity"><meta-data
+            android:name=".RegistrationActivity">
+            <meta-data
             android:name="android.app.lib_name"
             android:value="" />
+            <meta-data
+                android:name="com.google.firebase.components:com.google.firebase.auth"
+                android:value="com.google.firebase.components.ComponentRegistrar" />
         </activity>
         <activity
             android:name=".ForgotPasswordActivity"
@@ -91,6 +95,9 @@
             <meta-data
                 android:name="android.app.lib_name"
                 android:value="" />
+            <meta-data
+                android:name="com.google.firebase.components:com.google.firebase.auth"
+                android:value="com.google.firebase.components.ComponentRegistrar" />
         </activity>
     </application>
 
