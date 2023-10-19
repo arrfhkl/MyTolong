@@ -10,10 +10,14 @@ import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
 
+import com.google.firebase.FirebaseApp;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.FirebaseFirestore;
+
+import java.util.HashMap;
+import java.util.Map;
 
 
 public class RegistrationActivity extends AppCompatActivity {
@@ -37,6 +41,7 @@ public class RegistrationActivity extends AppCompatActivity {
         setContentView(R.layout.activity_registration);
 
         // Initialize Firebase Authentication
+        FirebaseApp.initializeApp(this);
         mAuth = FirebaseAuth.getInstance();
 
         // Initialize Firebase Firestore
@@ -144,6 +149,50 @@ public class RegistrationActivity extends AppCompatActivity {
             this.companyName = companyName;
             this.fullName = fullName;
             this.phone = phone;
+        }
+
+        // Getter and setter methods for your fields (optional)
+
+        public String getUserType() {
+            return userType;
+        }
+
+        public void setUserType(String userType) {
+            this.userType = userType;
+        }
+
+        public String getCompanyName() {
+            return companyName;
+        }
+
+        public void setCompanyName(String companyName) {
+            this.companyName = companyName;
+        }
+
+        public String getFullName() {
+            return fullName;
+        }
+
+        public void setFullName(String fullName) {
+            this.fullName = fullName;
+        }
+
+        public String getPhone() {
+            return phone;
+        }
+
+        public void setPhone(String phone) {
+            this.phone = phone;
+        }
+
+        // You can also create a method to convert the data class to a Map for Firestore
+        public Map<String, Object> toMap() {
+            Map<String, Object> map = new HashMap<>();
+            map.put("userType", userType);
+            map.put("companyName", companyName);
+            map.put("fullName", fullName);
+            map.put("phone", phone);
+            return map;
         }
     }
 }
