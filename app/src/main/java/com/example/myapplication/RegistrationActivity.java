@@ -1,7 +1,5 @@
 package com.example.myapplication;
 
-import android.annotation.SuppressLint;
-import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
@@ -9,10 +7,8 @@ import android.widget.EditText;
 import android.widget.RadioButton;
 import android.widget.RadioGroup;
 import android.widget.Toast;
-
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
-
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.FirebaseApp;
@@ -34,9 +30,7 @@ public class RegistrationActivity extends AppCompatActivity {
     private EditText passwordEditText;
     private EditText confirmPasswordEditText;
     private Button registerButton;
-
     private FirebaseAuth mAuth;
-    private DatabaseReference databaseReference;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -44,13 +38,8 @@ public class RegistrationActivity extends AppCompatActivity {
         setContentView(R.layout.activity_registration);
 
         FirebaseApp.initializeApp(this);
-
-        // Initialize Firebase Authentication
         mAuth = FirebaseAuth.getInstance();
 
-        // Initialize Firebase Realtime Database
-        FirebaseDatabase database = FirebaseDatabase.getInstance();
-        databaseReference = database.getReference("users");
 
         radioGroup = findViewById(R.id.radioGroup);
         radioCompany = findViewById(R.id.radioCompany);
@@ -63,67 +52,87 @@ public class RegistrationActivity extends AppCompatActivity {
         confirmPasswordEditText = findViewById(R.id.confirmPasswordEditText);
         registerButton = findViewById(R.id.registerButton);
 
-        radioGroup.setOnCheckedChangeListener(new RadioGroup.OnCheckedChangeListener() {
-            @Override
-            public void onCheckedChanged(RadioGroup group, int checkedId) {
-                if (checkedId == R.id.radioCompany) {
-                    companyNameEditText.setVisibility(View.VISIBLE);
-                } else if (checkedId == R.id.radioIndividual) {
-                    companyNameEditText.setVisibility(View.GONE);
-                }
+        radioGroup.setOnCheckedChangeListener((group, checkedId) -> {
+            if (checkedId == R.id.radioCompany) {
+                companyNameEditText.setVisibility(View.VISIBLE);
+            } else if (checkedId == R.id.radioIndividual) {
+                companyNameEditText.setVisibility(View.GONE);
             }
         });
 
-        registerButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                String selectedType = radioCompany.isChecked() ? "Company" : "Individual";
-                String companyName = companyNameEditText.getText().toString();
-                String fullName = fullNameEditText.getText().toString();
-                String email = emailEditText.getText().toString();
-                String phone = phoneEditText.getText().toString();
-                String password = passwordEditText.getText().toString();
-                String confirmPassword = confirmPasswordEditText.getText().toString();
+        registerButton.setOnClickListener(v -> {
+            String selectedType = radioCompany.isChecked() ? "Company" : "Individual";
+            String companyName = companyNameEditText.getText().toString();
+            String fullName = fullNameEditText.getText().toString();
+            String email = emailEditText.getText().toString();
+            String phone = phoneEditText.getText().toString();
+            String password = passwordEditText.getText().toString();
+            String confirmPassword = confirmPasswordEditText.getText().toString();
 
-                if (validateInput(fullName, email, phone, password, confirmPassword)) {
-                    // Register user with Firebase Authentication
-                    mAuth.createUserWithEmailAndPassword(email, password)
-                            .addOnCompleteListener(RegistrationActivity.this, new OnCompleteListener<AuthResult>() {
-                                @Override
-                                public void onComplete(@NonNull Task<AuthResult> task) {
-                                    if (task.isSuccessful()) {
-                                        FirebaseUser currentUser = mAuth.getCurrentUser();
-                                        if (currentUser != null) {
-                                            String userId = currentUser.getUid();
-                                            @SuppressLint("RestrictedApi") User newUser = new User(selectedType, companyName, fullName, email, phone);
-                                            databaseReference.child(userId).setValue(newUser);
+            if (validateInput(fullName, email, phone, password, confirmPassword)) {
+                mAuth.createUserWithEmailAndPassword(email, password)
+                        .addOnCompleteListener(RegistrationActivity.this, task -> {
+                            if (task.isSuccessful()) {
+                                FirebaseUser currentUser = mAuth.getCurrentUser();
+                                if (currentUser != null) {
+                                    String userId = currentUser.getUid();
+                                    User newUser = new User(selectedType, companyName, fullName, email, phone);
 
-                                            // Inside your registerUser method, after registration is successful
-                                            Intent intent = new Intent(RegistrationActivity.this, ProviderLoginFragment.class);
-                                            startActivity(intent);
-                                            finish(); // Close the registration activity
+                                    // Get a reference to your Firebase database
+                                    DatabaseReference databaseReference = FirebaseDatabase.getInstance().getReference("users");
 
-                                            // Inside your registerUser method, after registration is successful
-                                            Toast.makeText(RegistrationActivity.this, "Registration successful!", Toast.LENGTH_SHORT).show();
-
-                                            // Registration successful
-                                            // Redirect or show a success message
-                                        }
-                                    } else {
-                                        // Registration failed, handle errors
-                                        Toast.makeText(RegistrationActivity.this, "Registration failed. Please try again.", Toast.LENGTH_SHORT).show();
-                                    }
+                                    // Save the user data to the database
+                                    databaseReference.child(userId).setValue(newUser)
+                                            .addOnSuccessListener(aVoid -> {
+                                                // User data saved successfully
+                                                mAuth.signOut(); // Sign out the user after successful registration
+                                                Toast.makeText(RegistrationActivity.this, "Registration successful! You are now signed out.", Toast.LENGTH_SHORT).show();
+                                                finish(); // Close the registration activity
+                                            })
+                                            .addOnFailureListener(e -> {
+                                                // Error occurred while saving user data
+                                                Toast.makeText(RegistrationActivity.this, "Error saving user data. Please try again.", Toast.LENGTH_SHORT).show();
+                                            });
                                 }
-                            });
-                }
+                            } else {
+                                Toast.makeText(RegistrationActivity.this, "Registration failed. Please try again.", Toast.LENGTH_SHORT).show();
+                            }
+                        });
             }
         });
     }
 
     private boolean validateInput(String fullName, String email, String phone, String password, String confirmPassword) {
-        // Validation code as in your previous code
+        if (fullName.isEmpty() || email.isEmpty() || phone.isEmpty() || password.isEmpty() || confirmPassword.isEmpty()) {
+            // Check if any field is empty
+            Toast.makeText(RegistrationActivity.this, "All fields are required", Toast.LENGTH_SHORT).show();
+            return false;
+        }
 
-        // Return true if input is valid, false otherwise
+        if (!android.util.Patterns.EMAIL_ADDRESS.matcher(email).matches()) {
+            // Check if the email is in a valid format
+            Toast.makeText(RegistrationActivity.this, "Invalid email format", Toast.LENGTH_SHORT).show();
+            return false;
+        }
+
+        if (phone.length() != 10) {
+            // Check if the phone number is 10 digits (you can adjust this as needed)
+            Toast.makeText(RegistrationActivity.this, "Phone number should be 10 digits", Toast.LENGTH_SHORT).show();
+            return false;
+        }
+
+        if (password.length() < 6) {
+            // Check if the password is at least 6 characters long (you can adjust this as needed)
+            Toast.makeText(RegistrationActivity.this, "Password should be at least 6 characters", Toast.LENGTH_SHORT).show();
+            return false;
+        }
+
+        if (!password.equals(confirmPassword)) {
+            // Check if the password and confirm password match
+            Toast.makeText(RegistrationActivity.this, "Password and confirm password do not match", Toast.LENGTH_SHORT).show();
+            return false;
+        }
+
         return true;
     }
 
@@ -146,7 +155,6 @@ public class RegistrationActivity extends AppCompatActivity {
             this.phone = phone;
         }
 
-        // Getters and setters for the class properties
         public String getUserType() {
             return userType;
         }
@@ -188,5 +196,6 @@ public class RegistrationActivity extends AppCompatActivity {
         }
     }
 }
+
 
 
