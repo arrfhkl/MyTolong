@@ -80,9 +80,6 @@
             android:name=".RegistrationActivity"
             android:exported="false">
             <meta-data
-            android:name="android.app.lib_name"
-            android:value="" />
-            <meta-data
                 android:name="com.google.firebase.components:com.google.firebase.auth"
                 android:value="com.google.firebase.components.ComponentRegistrar" />
         </activity>
@@ -96,9 +93,6 @@
         <activity
             android:name=".MainActivity"
             android:exported="true">
-            <meta-data
-                android:name="android.app.lib_name"
-                android:value="" />
             <meta-data
                 android:name="com.google.firebase.components:com.google.firebase.auth"
                 android:value="com.google.firebase.components.ComponentRegistrar" />

@@ -9,8 +9,8 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.FirebaseFirestore;
-import com.google.firebase.firestore.SetOptions;
 
 public class RegistrationActivity extends AppCompatActivity {
 
@@ -28,8 +28,10 @@ public class RegistrationActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_registration);
 
-        // Initialize Firebase Authentication and Firestore
+        // Initialize Firebase Authentication
         mAuth = FirebaseAuth.getInstance();
+
+        // Initialize Firebase Firestore
         db = FirebaseFirestore.getInstance();
 
         riderNameEditText = findViewById(R.id.riderNameEditText);
@@ -53,21 +55,18 @@ public class RegistrationActivity extends AppCompatActivity {
                                 FirebaseUser currentUser = mAuth.getCurrentUser();
                                 if (currentUser != null) {
                                     String userId = currentUser.getUid();
+                                    User newUser = new User(riderName, riderPhone);
 
-                                    // Create a Rider object with the details to be saved in Firestore
-                                    Rider newRider = new Rider(riderName, riderPhone);
-
-                                    // Save additional rider details in Firestore
-                                    db.collection("riders")
-                                            .document(userId)
-                                            .set(newRider, SetOptions.merge())
+                                    // Save additional details in Firestore
+                                    DocumentReference userRef = db.collection("users").document(userId);
+                                    userRef.set(newUser)
                                             .addOnSuccessListener(aVoid -> {
                                                 mAuth.signOut();
                                                 Toast.makeText(RegistrationActivity.this, "Registration successful! You are now signed out.", Toast.LENGTH_SHORT).show();
                                                 finish();
                                             })
                                             .addOnFailureListener(e -> {
-                                                Toast.makeText(RegistrationActivity.this, "Error saving rider data in Firestore. Please try again.", Toast.LENGTH_SHORT).show();
+                                                Toast.makeText(RegistrationActivity.this, "Error saving user data in Firestore. Please try again.", Toast.LENGTH_SHORT).show();
                                             });
                                 }
                             } else {
@@ -107,20 +106,21 @@ public class RegistrationActivity extends AppCompatActivity {
         return true;
     }
 
-    public class Rider {
+    public class User {
         private String name;
         private String phone;
 
-        public Rider() {
+        public User() {
             // Default constructor required for Firestore
         }
 
-        public Rider(String name, String phone) {
+        public User(String name, String phone) {
             this.name = name;
             this.phone = phone;
         }
     }
 }
+
 
 
 
