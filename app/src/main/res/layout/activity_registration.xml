@@ -5,56 +5,82 @@
     android:padding="16dp"
     android:background="#FDD662">
 
-    <!-- Rider Registration Title -->
-    <TextView
+    <!-- Radio Group for User Type Selection -->
+    <RadioGroup
+        android:id="@+id/radioGroup"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Rider Registration"
-        android:textSize="25dp"
-        android:textStyle="bold"
         android:layout_centerHorizontal="true"
-        android:id="@+id/textRegis"
-        android:textColor="#C61205"/>
+        android:layout_marginTop="20dp">
 
-    <!-- Rider Name -->
+        <!-- Radio Button for Company -->
+        <RadioButton
+            android:id="@+id/radioCompany"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Company"
+            android:checked="true" />
+
+        <!-- Radio Button for Individual -->
+        <RadioButton
+            android:id="@+id/radioIndividual"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Individual" />
+    </RadioGroup>
+
+    <!-- Company Name (Visible when "Company" is selected) -->
     <EditText
-        android:id="@+id/riderNameEditText"
+        android:id="@+id/companyNameEditText"
+        android:layout_width="300dp"
+        android:layout_height="45dp"
+        android:layout_centerHorizontal="true"
+        android:textAlignment="center"
+        android:hint="Company Name"
+        android:background="#EFDBBC"
+        android:layout_below="@id/radioGroup"
+        android:layout_marginTop="16dp"
+        android:visibility="visible" />
+
+    <!-- Full Name -->
+    <EditText
+        android:id="@+id/fullNameEditText"
         android:layout_width="300dp"
         android:layout_height="45dp"
         android:layout_centerHorizontal="true"
         android:textAlignment="center"
         android:hint="Full Name"
         android:background="#EFDBBC"
-        android:layout_below="@id/textRegis"
-        android:layout_marginTop="15dp"/>
+        android:layout_below="@id/radioGroup"
+        android:layout_marginTop="16dp" />
 
-    <!-- Rider Email -->
+    <!-- Email -->
     <EditText
-        android:id="@+id/riderEmailEditText"
+        android:id="@+id/emailEditText"
         android:layout_width="300dp"
         android:layout_height="45dp"
         android:layout_centerHorizontal="true"
         android:textAlignment="center"
         android:hint="Email"
         android:background="#EFDBBC"
-        android:layout_below="@id/riderNameEditText"
-        android:layout_marginTop="16dp"/>
+        android:layout_below="@id/fullNameEditText"
+        android:layout_marginTop="16dp" />
 
-    <!-- Rider Phone Number -->
+    <!-- Phone Number -->
     <EditText
-        android:id="@+id/riderPhoneEditText"
+        android:id="@+id/phoneEditText"
         android:layout_width="300dp"
         android:layout_height="45dp"
         android:layout_centerHorizontal="true"
         android:textAlignment="center"
         android:hint="Phone Number"
         android:background="#EFDBBC"
-        android:layout_below="@id/riderEmailEditText"
-        android:layout_marginTop="16dp"/>
+        android:layout_below="@id/emailEditText"
+        android:layout_marginTop="16dp" />
 
-    <!-- Rider Password -->
+    <!-- Password -->
     <EditText
-        android:id="@+id/riderPasswordEditText"
+        android:id="@+id/passwordEditText"
         android:layout_width="300dp"
         android:layout_height="45dp"
         android:layout_centerHorizontal="true"
@@ -62,12 +88,12 @@
         android:hint="Password"
         android:inputType="textPassword"
         android:background="#EFDBBC"
-        android:layout_below="@id/riderPhoneEditText"
-        android:layout_marginTop="16dp"/>
+        android:layout_below="@id/phoneEditText"
+        android:layout_marginTop="16dp" />
 
     <!-- Confirm Password -->
     <EditText
-        android:id="@+id/riderConfirmPasswordEditText"
+        android:id="@+id/confirmPasswordEditText"
         android:layout_width="300dp"
         android:layout_height="45dp"
         android:layout_centerHorizontal="true"
@@ -75,19 +101,19 @@
         android:hint="Confirm Password"
         android:inputType="textPassword"
         android:background="#EFDBBC"
-        android:layout_below="@id/riderPasswordEditText"
-        android:layout_marginTop="16dp"/>
+        android:layout_below="@id/passwordEditText"
+        android:layout_marginTop="16dp" />
 
-    <!-- Rider Registration Button -->
+    <!-- Register Button -->
     <Button
-        android:id="@+id/riderRegisterButton"
-        android:layout_width="120dp"
+        android:id="@+id/registerButton"
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_below="@id/riderConfirmPasswordEditText"
+        android:layout_centerHorizontal="true"
+        android:layout_below="@id/confirmPasswordEditText"
         android:layout_marginTop="24dp"
         android:text="Register"
-        android:backgroundTint="#C61205"
-        android:layout_centerHorizontal="true"/>
-
+        android:backgroundTint="#C61205" />
 </RelativeLayout>
+
 
