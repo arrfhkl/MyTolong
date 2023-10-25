@@ -105,9 +105,9 @@ public class RegistrationActivity extends AppCompatActivity {
             return false;
         }
 
-        if (phone.length() != 10) {
-            // Check if the phone number is 10 digits (you can adjust this as needed)
-            Toast.makeText(RegistrationActivity.this, "Phone number should be 10 digits", Toast.LENGTH_SHORT).show();
+        if (phone.length() < 10) {
+            // Check if the phone number is less than 10 digits
+            Toast.makeText(RegistrationActivity.this, "Phone number should be at least 10 digits", Toast.LENGTH_SHORT).show();
             return false;
         }
 

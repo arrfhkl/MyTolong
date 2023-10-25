@@ -18,6 +18,7 @@ import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
 
 public class ProviderLoginFragment extends Fragment {
 
@@ -62,8 +63,15 @@ public class ProviderLoginFragment extends Fragment {
                             public void onComplete(@NonNull Task<AuthResult> task) {
                                 if (task.isSuccessful()) {
                                     // Login successful
-                                    Intent intent = new Intent(getActivity(), HomePageActivity.class);
-                                    startActivity(intent);
+                                    FirebaseUser currentUser = mAuth.getCurrentUser();
+                                    if (currentUser != null) {
+                                        String userEmail = currentUser.getEmail(); // Get user email
+                                        Toast.makeText(getActivity(), "Logged in as: " + userEmail, Toast.LENGTH_SHORT).show();
+
+                                        // Redirect to the home page or your desired activity
+                                        Intent intent = new Intent(getActivity(), HomePageActivity.class);
+                                        startActivity(intent);
+                                    }
                                 } else {
                                     // Login failed
                                     Toast.makeText(getActivity(), "Authentication failed.", Toast.LENGTH_SHORT).show();
@@ -96,6 +104,7 @@ public class ProviderLoginFragment extends Fragment {
         return view;
     }
 }
+
 
 
 
