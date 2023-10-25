@@ -97,6 +97,14 @@
                 android:name="com.google.firebase.components:com.google.firebase.auth"
                 android:value="com.google.firebase.components.ComponentRegistrar" />
         </activity>
+        <activity android:name="com.example.myapplication.ProviderLoginFragment"
+            tools:ignore="Instantiatable"
+            android:exported="true">
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
+        </activity>
     </application>
 
 
