@@ -3,7 +3,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    android:background="#FDD662">
+    android:background="@drawable/backgroundp">
 
     <FrameLayout
         android:id="@+id/fragmentContainer"
