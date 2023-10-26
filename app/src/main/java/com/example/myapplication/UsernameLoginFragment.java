@@ -13,6 +13,8 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 
+import com.google.firebase.auth.FirebaseAuth;
+
 public class UsernameLoginFragment extends Fragment {
 
     private EditText usernameEditText;
@@ -20,6 +22,8 @@ public class UsernameLoginFragment extends Fragment {
     private Button loginButton;
     private TextView forgotPasswordTextView;
     private TextView registerTextView;
+
+    private FirebaseAuth mAuth;
 
     @SuppressLint("MissingInflatedId")
     @Override
