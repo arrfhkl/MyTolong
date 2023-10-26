@@ -14,6 +14,8 @@ import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 
 import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.OnFailureListener;
+import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.FirebaseApp;
 import com.google.firebase.auth.AuthResult;
@@ -21,6 +23,10 @@ import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.firestore.FirebaseFirestore;
+
+import java.util.HashMap;
+import java.util.Map;
 
 public class RegistrationActivity extends AppCompatActivity {
 
@@ -138,28 +144,53 @@ public class RegistrationActivity extends AppCompatActivity {
                             FirebaseUser currentUser = mAuth.getCurrentUser();
                             if (currentUser != null) {
                                 String userId = currentUser.getUid();
-                                @SuppressLint("RestrictedApi") User newUser = new User(selectedType, companyName, fullName, email, phone);
-                                databaseReference.child(userId).setValue(newUser);
 
-                                // Inside your registerUser method, after registration is successful
-                                Intent intent = new Intent(RegistrationActivity.this, ProviderLoginFragment.class);
-                                startActivity(intent);
-                                finish(); // Close the registration activity
+                                // Create a Map to store user data
+                                Map<String, Object> userData = new HashMap<>();
+                                userData.put("userType", selectedType);
+                                userData.put("companyName", companyName);
+                                userData.put("fullName", fullName);
+                                userData.put("email", email);
+                                userData.put("phone", phone);
 
-                                // Inside your registerUser method, after registration is successful
-                                Toast.makeText(RegistrationActivity.this, "Registration successful!", Toast.LENGTH_SHORT).show();
+                                // Get a reference to the Firestore database
+                                FirebaseFirestore db = FirebaseFirestore.getInstance();
 
+                                // Add the user data to Firestore
+                                db.collection("users").document(userId)
+                                        .set(userData)
+                                        .addOnSuccessListener(new OnSuccessListener<Void>() {
+                                            @Override
+                                            public void onSuccess(Void aVoid) {
+                                                // User data added to Firestore successfully
 
+                                                // You can add a success message or navigate to the next screen here
+                                                // For example:
+                                                Toast.makeText(RegistrationActivity.this, "Registration successful!", Toast.LENGTH_SHORT).show();
 
-                                // Registration successful
-                                // Redirect or show a success message
+                                                // Navigate to the next screen, e.g., ProviderLoginActivity
+                                                Intent intent = new Intent(RegistrationActivity.this, ProviderLoginFragment.class);
+                                                startActivity(intent);
+                                                finish(); // Close the registration activity
+                                            }
+                                        })
+                                        .addOnFailureListener(new OnFailureListener() {
+                                            @Override
+                                            public void onFailure(@NonNull Exception e) {
+                                                // Error adding user data to Firestore
+                                                Toast.makeText(RegistrationActivity.this, "Error saving user data in Firestore.", Toast.LENGTH_SHORT).show();
+                                            }
+                                        });
                             }
                         } else {
                             // Registration failed, handle errors
+                            Toast.makeText(RegistrationActivity.this, "Registration failed. Please try again.", Toast.LENGTH_SHORT).show();
                         }
                     }
                 });
     }
+
+
 
     public class User {
         private String userType;
