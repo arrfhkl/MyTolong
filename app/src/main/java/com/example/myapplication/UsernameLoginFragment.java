@@ -1,6 +1,5 @@
 package com.example.myapplication;
 
-import android.annotation.SuppressLint;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.LayoutInflater;
@@ -15,6 +14,8 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 
+import com.example.myapplication.UserForgotPasswordActivity;
+import com.example.myapplication.UserRegistrationActivity;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.AuthResult;
@@ -29,14 +30,15 @@ public class UsernameLoginFragment extends Fragment {
     private TextView forgotPasswordTextView;
     private TextView registerTextView;
 
-    private FirebaseAuth mAuth;
+    private FirebaseAuth mAuth; // Initialize Firebase Authentication
 
-    @SuppressLint("MissingInflatedId")
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_username_login, container, false);
 
-        emailEditText = view.findViewById(R.id.emailEditText);
+        mAuth = FirebaseAuth.getInstance(); // Initialize Firebase Authentication
+
+        emailEditText = view.findViewById(R.id.usernameEditText);
         passwordEditText = view.findViewById(R.id.passwordEditText);
         loginButton = view.findViewById(R.id.loginButton);
         forgotPasswordTextView = view.findViewById(R.id.forgotPasswordTextView);
@@ -66,12 +68,12 @@ public class UsernameLoginFragment extends Fragment {
                                         Toast.makeText(getActivity(), "Logged in as: " + userEmail, Toast.LENGTH_SHORT).show();
 
                                         // Redirect to the home page or your desired activity
-                                        Intent intent = new Intent(getActivity(), HomePageActivity.class);
+                                        Intent intent = new Intent(getActivity(), UserHomePageActivity.class);
                                         startActivity(intent);
                                     }
                                 } else {
                                     // Login failed
-                                    Toast.makeText(getActivity(), "Authentication failed.", Toast.LENGTH_SHORT).show();
+                                    Toast.makeText(getActivity(), "Authentication failed. " + task.getException().getMessage(), Toast.LENGTH_SHORT).show();
                                 }
                             }
                         });
@@ -81,9 +83,6 @@ public class UsernameLoginFragment extends Fragment {
         forgotPasswordTextView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                String email = emailEditText.getText().toString().trim();
-                String password = passwordEditText.getText().toString().trim();
-
                 Intent intent = new Intent(getActivity(), UserForgotPasswordActivity.class);
                 startActivity(intent);
             }
@@ -92,8 +91,6 @@ public class UsernameLoginFragment extends Fragment {
         registerTextView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                // Navigate to the registration page when clicked
-                // You can replace RegistrationActivity.class with your actual activity
                 Intent intent = new Intent(getActivity(), UserRegistrationActivity.class);
                 startActivity(intent);
             }
