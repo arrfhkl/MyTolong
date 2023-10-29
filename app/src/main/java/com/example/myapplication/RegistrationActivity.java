@@ -23,10 +23,6 @@ import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
-import com.google.firebase.firestore.FirebaseFirestore;
-
-import java.util.HashMap;
-import java.util.Map;
 
 public class RegistrationActivity extends AppCompatActivity {
 
@@ -145,24 +141,15 @@ public class RegistrationActivity extends AppCompatActivity {
                             if (currentUser != null) {
                                 String userId = currentUser.getUid();
 
-                                // Create a Map to store user data
-                                Map<String, Object> userData = new HashMap<>();
-                                userData.put("userType", selectedType);
-                                userData.put("companyName", companyName);
-                                userData.put("fullName", fullName);
-                                userData.put("email", email);
-                                userData.put("phone", phone);
+                                // Create a User object to store user data
+                                User newUser = new User(selectedType, companyName, fullName, email, phone);
 
-                                // Get a reference to the Firestore database
-                                FirebaseFirestore db = FirebaseFirestore.getInstance();
-
-                                // Add the user data to Firestore
-                                db.collection("users").document(userId)
-                                        .set(userData)
+                                // Save the user data in the Realtime Database under the generated user ID
+                                databaseReference.child(userId).setValue(newUser)
                                         .addOnSuccessListener(new OnSuccessListener<Void>() {
                                             @Override
                                             public void onSuccess(Void aVoid) {
-                                                // User data added to Firestore successfully
+                                                // User data added to Realtime Database successfully
 
                                                 // You can add a success message or navigate to the next screen here
                                                 // For example:
@@ -177,8 +164,8 @@ public class RegistrationActivity extends AppCompatActivity {
                                         .addOnFailureListener(new OnFailureListener() {
                                             @Override
                                             public void onFailure(@NonNull Exception e) {
-                                                // Error adding user data to Firestore
-                                                Toast.makeText(RegistrationActivity.this, "Error saving user data in Firestore.", Toast.LENGTH_SHORT).show();
+                                                // Error adding user data to Realtime Database
+                                                Toast.makeText(RegistrationActivity.this, "Error saving user data in Realtime Database.", Toast.LENGTH_SHORT).show();
                                             }
                                         });
                             }
@@ -189,6 +176,7 @@ public class RegistrationActivity extends AppCompatActivity {
                     }
                 });
     }
+
 
 
 
