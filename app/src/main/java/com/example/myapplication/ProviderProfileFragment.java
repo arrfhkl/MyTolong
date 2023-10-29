@@ -13,8 +13,11 @@ import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 
 import com.google.firebase.auth.FirebaseAuth;
-import com.google.firebase.firestore.DocumentSnapshot;
-import com.google.firebase.firestore.FirebaseFirestore;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
 
 public class ProviderProfileFragment extends Fragment {
 
@@ -23,8 +26,8 @@ public class ProviderProfileFragment extends Fragment {
     private TextView emailTextView;
     private Button editProfileButton;
 
-    // Initialize Firebase Firestore and Firebase Authentication
-    private FirebaseFirestore db;
+    // Initialize Firebase Realtime Database and Firebase Authentication
+    private DatabaseReference databaseReference;
     private FirebaseAuth mAuth;
 
     @Nullable
@@ -38,36 +41,38 @@ public class ProviderProfileFragment extends Fragment {
         emailTextView = view.findViewById(R.id.emailTextView);
         editProfileButton = view.findViewById(R.id.editProfileButton);
 
-        // Initialize Firebase Firestore and Firebase Authentication
-        db = FirebaseFirestore.getInstance();
+        // Initialize Firebase Realtime Database and Firebase Authentication
         mAuth = FirebaseAuth.getInstance();
+        FirebaseDatabase database = FirebaseDatabase.getInstance();
+        databaseReference = database.getReference("users");
 
         // Get the current user's UID
         String userId = mAuth.getCurrentUser().getUid();
 
-        // Reference to the user's document in Firestore
-        db.collection("users").document(userId)
-                .get()
-                .addOnCompleteListener(task -> {
-                    if (task.isSuccessful()) {
-                        DocumentSnapshot document = task.getResult();
-                        if (document.exists()) {
-                            // Data found in Firestore
-                            String companyName = document.getString("companyName");
-                            String phoneNumber = document.getString("phone");
-                            String email = mAuth.getCurrentUser().getEmail();
+        // Reference to the user's data in the Realtime Database
+        databaseReference.child(userId).addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                if (dataSnapshot.exists()) {
+                    // Data found in Realtime Database
+                    String companyName = dataSnapshot.child("companyName").getValue(String.class);
+                    String phoneNumber = dataSnapshot.child("phone").getValue(String.class);
+                    String email = mAuth.getCurrentUser().getEmail();
 
-                            // Update the UI elements with Firestore data
-                            companyNameTextView.setText(companyName);
-                            phoneNumberTextView.setText(phoneNumber);
-                            emailTextView.setText(email);
-                        } else {
-                            // Handle the case where the document doesn't exist
-                        }
-                    } else {
-                        // Handle errors while fetching data from Firestore
-                    }
-                });
+                    // Update the UI elements with Realtime Database data
+                    companyNameTextView.setText(companyName);
+                    phoneNumberTextView.setText(phoneNumber);
+                    emailTextView.setText(email);
+                } else {
+                    // Handle the case where the data doesn't exist
+                }
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError databaseError) {
+                // Handle errors while fetching data from Realtime Database
+            }
+        });
 
         // Set up a click listener for the Edit Profile button
         editProfileButton.setOnClickListener(new View.OnClickListener() {
@@ -79,9 +84,9 @@ public class ProviderProfileFragment extends Fragment {
             }
         });
 
-
         return view;
     }
 }
+
 
 
