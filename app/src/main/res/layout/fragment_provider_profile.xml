@@ -1,8 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    >
+    android:layout_height="match_parent">
 
     <!-- Company Name -->
     <TextView
@@ -14,12 +13,34 @@
         android:text="Company Name"
         android:textSize="18sp" />
 
+    <!-- Full Name -->
+    <TextView
+        android:id="@+id/fullNameTextView"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/companyNameTextView"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="8dp"
+        android:text="Full Name"
+        android:textSize="18sp" />
+
+    <!-- Type (Company or Individual) -->
+    <TextView
+        android:id="@+id/typeTextView"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/fullNameTextView"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="8dp"
+        android:text="Type"
+        android:textSize="18sp" />
+
     <!-- Phone Number -->
     <TextView
         android:id="@+id/phoneNumberTextView"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_below="@id/companyNameTextView"
+        android:layout_below="@id/typeTextView"
         android:layout_centerHorizontal="true"
         android:layout_marginTop="8dp"
         android:text="Phone Number"
@@ -45,6 +66,7 @@
         android:layout_centerHorizontal="true"
         android:layout_marginTop="16dp"
         android:text="Edit Profile"
-        android:backgroundTint="#F44336"/>
+        android:backgroundTint="#F44336" />
 
 </RelativeLayout>
+

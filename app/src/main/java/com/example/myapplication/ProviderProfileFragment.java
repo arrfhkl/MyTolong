@@ -24,6 +24,8 @@ public class ProviderProfileFragment extends Fragment {
     private TextView companyNameTextView;
     private TextView phoneNumberTextView;
     private TextView emailTextView;
+    private TextView fullNameTextView; // New TextView for Full Name
+    private TextView typeTextView; // New TextView for Type (Company or Individual)
     private Button editProfileButton;
 
     // Initialize Firebase Realtime Database and Firebase Authentication
@@ -39,6 +41,8 @@ public class ProviderProfileFragment extends Fragment {
         companyNameTextView = view.findViewById(R.id.companyNameTextView);
         phoneNumberTextView = view.findViewById(R.id.phoneNumberTextView);
         emailTextView = view.findViewById(R.id.emailTextView);
+        fullNameTextView = view.findViewById(R.id.fullNameTextView); // Initialize Full Name TextView
+        typeTextView = view.findViewById(R.id.typeTextView); // Initialize Type TextView
         editProfileButton = view.findViewById(R.id.editProfileButton);
 
         // Initialize Firebase Realtime Database and Firebase Authentication
@@ -58,11 +62,15 @@ public class ProviderProfileFragment extends Fragment {
                     String companyName = dataSnapshot.child("companyName").getValue(String.class);
                     String phoneNumber = dataSnapshot.child("phone").getValue(String.class);
                     String email = mAuth.getCurrentUser().getEmail();
+                    String fullName = dataSnapshot.child("fullName").getValue(String.class);
+                    String userType = dataSnapshot.child("userType").getValue(String.class);
 
                     // Update the UI elements with Realtime Database data
                     companyNameTextView.setText(companyName);
                     phoneNumberTextView.setText(phoneNumber);
                     emailTextView.setText(email);
+                    fullNameTextView.setText(fullName); // Display Full Name
+                    typeTextView.setText(userType); // Display Type (Company or Individual)
                 } else {
                     // Handle the case where the data doesn't exist
                 }
@@ -87,6 +95,7 @@ public class ProviderProfileFragment extends Fragment {
         return view;
     }
 }
+
 
 
 
