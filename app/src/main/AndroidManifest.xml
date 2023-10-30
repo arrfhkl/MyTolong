@@ -114,12 +114,24 @@
                 android:value="" />
         </activity>
         <activity
+            android:name=".UsernameLoginFragment"
+            android:exported="true"
+            tools:ignore="Instantiatable">
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
+        </activity>
+
+        <activity
             android:name=".MainActivity"
             android:exported="true">
             <meta-data
                 android:name="com.google.firebase.components:com.google.firebase.auth"
                 android:value="com.google.firebase.components.ComponentRegistrar" />
         </activity>
+
         <activity
             android:name=".ProviderLoginFragment"
             android:exported="true"

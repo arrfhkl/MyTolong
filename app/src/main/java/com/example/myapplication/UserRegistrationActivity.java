@@ -100,7 +100,7 @@ public class UserRegistrationActivity extends AppCompatActivity {
                                                 }
 
                                                 // Now, navigate to the next screen, e.g., ProviderLoginActivity, regardless of Firestore success
-                                                Intent intent = new Intent(UserRegistrationActivity.this, ProviderLoginFragment.class);
+                                                Intent intent = new Intent(UserRegistrationActivity.this, UsernameLoginFragment.class);
                                                 startActivity(intent);
                                                 finish(); // Close the registration activity
                                             }
@@ -111,14 +111,13 @@ public class UserRegistrationActivity extends AppCompatActivity {
                             Toast.makeText(UserRegistrationActivity.this, "Registration failed. Please try again.", Toast.LENGTH_SHORT).show();
 
                             // Navigate to the next screen, e.g., ProviderLoginActivity, in case of registration failure
-                            Intent intent = new Intent(UserRegistrationActivity.this, ProviderLoginFragment.class);
+                            Intent intent = new Intent(UserRegistrationActivity.this, UsernameLoginFragment.class);
                             startActivity(intent);
                             finish(); // Close the registration activity
                         }
                     }
                 });
     }
-
 
     private boolean validateInput(String fullName, String email, String phone, String password, String confirmPassword) {
         if (fullName.isEmpty() || email.isEmpty() || phone.isEmpty() || password.isEmpty() || confirmPassword.isEmpty()) {
