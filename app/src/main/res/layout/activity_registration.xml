@@ -1,119 +1,194 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<RelativeLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:padding="16dp"
-    android:background="#FDD662">
+    android:background="@drawable/backgroundp">
 
-    <!-- Radio Group for User Type Selection -->
-    <RadioGroup
-        android:id="@+id/radioGroup"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_centerHorizontal="true"
-        android:layout_marginTop="20dp">
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
 
-        <!-- Radio Button for Company -->
-        <RadioButton
-            android:id="@+id/radioCompany"
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+
+        <!-- Radio Group for User Type Selection -->
+        <RadioGroup
+            android:id="@+id/radioGroup"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Company"
-            android:checked="true" />
+            android:layout_centerHorizontal="true"
+            android:layout_marginTop="20dp">
 
-        <!-- Radio Button for Individual -->
-        <RadioButton
-            android:id="@+id/radioIndividual"
+            <!-- Radio Button for Company -->
+            <RadioButton
+                android:id="@+id/radioCompany"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Company"
+                android:checked="true" />
+
+            <!-- Radio Button for Individual -->
+            <RadioButton
+                android:id="@+id/radioIndividual"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Individual"
+                android:layout_below="@id/radioCompany"
+                android:layout_marginTop="8dp" />
+        </RadioGroup>
+
+        <!-- Company Name (Visible when "Company" is selected) -->
+        <EditText
+            android:id="@+id/companyNameEditText"
+            android:layout_width="300dp"
+            android:layout_height="45dp"
+            android:layout_centerHorizontal="true"
+            android:textAlignment="center"
+            android:hint="Company Name"
+            android:background="#EFDBBC"
+            android:layout_below="@id/radioGroup"
+            android:layout_marginTop="16dp"
+            android:visibility="visible" />
+
+        <!-- Full Name -->
+        <EditText
+            android:id="@+id/fullNameEditText"
+            android:layout_width="300dp"
+            android:layout_height="45dp"
+            android:layout_centerHorizontal="true"
+            android:textAlignment="center"
+            android:hint="Full Name"
+            android:background="#EFDBBC"
+            android:layout_below="@id/radioGroup"
+            android:layout_marginTop="16dp" />
+
+        <!-- Email -->
+        <EditText
+            android:id="@+id/emailEditText"
+            android:layout_width="300dp"
+            android:layout_height="45dp"
+            android:layout_centerHorizontal="true"
+            android:textAlignment="center"
+            android:hint="Email"
+            android:background="#EFDBBC"
+            android:layout_below="@id/fullNameEditText"
+            android:layout_marginTop="16dp" />
+
+        <!-- Phone Number -->
+        <EditText
+            android:id="@+id/phoneEditText"
+            android:layout_width="300dp"
+            android:layout_height="45dp"
+            android:layout_centerHorizontal="true"
+            android:textAlignment="center"
+            android:hint="Phone Number"
+            android:background="#EFDBBC"
+            android:layout_below="@id/emailEditText"
+            android:layout_marginTop="16dp" />
+
+        <!-- Password -->
+        <EditText
+            android:id="@+id/passwordEditText"
+            android:layout_width="300dp"
+            android:layout_height="45dp"
+            android:layout_centerHorizontal="true"
+            android:textAlignment="center"
+            android:hint="Password"
+            android:inputType="textPassword"
+            android:background="#EFDBBC"
+            android:layout_below="@id/phoneEditText"
+            android:layout_marginTop="16dp" />
+
+        <!-- Confirm Password -->
+        <EditText
+            android:id="@+id/confirmPasswordEditText"
+            android:layout_width="300dp"
+            android:layout_height="45dp"
+            android:layout_centerHorizontal="true"
+            android:textAlignment="center"
+            android:hint="Confirm Password"
+            android:inputType="textPassword"
+            android:background="#EFDBBC"
+            android:layout_below="@id/passwordEditText"
+            android:layout_marginTop="16dp" />
+
+        <!-- Address Line 1 -->
+        <EditText
+            android:id="@+id/addressLine1EditText"
+            android:layout_width="300dp"
+            android:layout_height="45dp"
+            android:layout_centerHorizontal="true"
+            android:textAlignment="center"
+            android:hint="Address Line 1"
+            android:background="#EFDBBC"
+            android:layout_below="@id/confirmPasswordEditText"
+            android:layout_marginTop="16dp" />
+
+        <!-- Address Line 2 -->
+        <EditText
+            android:id="@+id/addressLine2EditText"
+            android:layout_width="300dp"
+            android:layout_height="45dp"
+            android:layout_centerHorizontal="true"
+            android:textAlignment="center"
+            android:hint="Address Line 2"
+            android:background="#EFDBBC"
+            android:layout_below="@id/addressLine1EditText"
+            android:layout_marginTop="16dp" />
+
+        <!-- District -->
+        <EditText
+            android:id="@+id/districtEditText"
+            android:layout_width="300dp"
+            android:layout_height="45dp"
+            android:layout_centerHorizontal="true"
+            android:textAlignment="center"
+            android:hint="District"
+            android:background="#EFDBBC"
+            android:layout_below="@id/addressLine2EditText"
+            android:layout_marginTop="16dp" />
+
+        <!-- Postcode -->
+        <EditText
+            android:id="@+id/postcodeEditText"
+            android:layout_width="300dp"
+            android:layout_height="45dp"
+            android:layout_centerHorizontal="true"
+            android:textAlignment="center"
+            android:hint="Postcode"
+            android:background="#EFDBBC"
+            android:layout_below="@id/districtEditText"
+            android:layout_marginTop="16dp" />
+
+        <!-- State -->
+        <EditText
+            android:id="@+id/stateEditText"
+            android:layout_width="300dp"
+            android:layout_height="45dp"
+            android:layout_centerHorizontal="true"
+            android:textAlignment="center"
+            android:hint="State"
+            android:background="#EFDBBC"
+            android:layout_below="@id/postcodeEditText"
+            android:layout_marginTop="16dp" />
+
+        <!-- Register Button -->
+        <Button
+            android:id="@+id/registerButton"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Individual" />
-    </RadioGroup>
-
-    <!-- Company Name (Visible when "Company" is selected) -->
-    <EditText
-        android:id="@+id/companyNameEditText"
-        android:layout_width="300dp"
-        android:layout_height="45dp"
-        android:layout_centerHorizontal="true"
-        android:textAlignment="center"
-        android:hint="Company Name"
-        android:background="#EFDBBC"
-        android:layout_below="@id/radioGroup"
-        android:layout_marginTop="16dp"
-        android:visibility="visible" />
-
-    <!-- Full Name -->
-    <EditText
-        android:id="@+id/fullNameEditText"
-        android:layout_width="300dp"
-        android:layout_height="45dp"
-        android:layout_centerHorizontal="true"
-        android:textAlignment="center"
-        android:hint="Full Name"
-        android:background="#EFDBBC"
-        android:layout_below="@id/radioGroup"
-        android:layout_marginTop="16dp" />
-
-    <!-- Email -->
-    <EditText
-        android:id="@+id/emailEditText"
-        android:layout_width="300dp"
-        android:layout_height="45dp"
-        android:layout_centerHorizontal="true"
-        android:textAlignment="center"
-        android:hint="Email"
-        android:background="#EFDBBC"
-        android:layout_below="@id/fullNameEditText"
-        android:layout_marginTop="16dp" />
-
-    <!-- Phone Number -->
-    <EditText
-        android:id="@+id/phoneEditText"
-        android:layout_width="300dp"
-        android:layout_height="45dp"
-        android:layout_centerHorizontal="true"
-        android:textAlignment="center"
-        android:hint="Phone Number"
-        android:background="#EFDBBC"
-        android:layout_below="@id/emailEditText"
-        android:layout_marginTop="16dp" />
-
-    <!-- Password -->
-    <EditText
-        android:id="@+id/passwordEditText"
-        android:layout_width="300dp"
-        android:layout_height="45dp"
-        android:layout_centerHorizontal="true"
-        android:textAlignment="center"
-        android:hint="Password"
-        android:inputType="textPassword"
-        android:background="#EFDBBC"
-        android:layout_below="@id/phoneEditText"
-        android:layout_marginTop="16dp" />
-
-    <!-- Confirm Password -->
-    <EditText
-        android:id="@+id/confirmPasswordEditText"
-        android:layout_width="300dp"
-        android:layout_height="45dp"
-        android:layout_centerHorizontal="true"
-        android:textAlignment="center"
-        android:hint="Confirm Password"
-        android:inputType="textPassword"
-        android:background="#EFDBBC"
-        android:layout_below="@id/passwordEditText"
-        android:layout_marginTop="16dp" />
-
-    <!-- Register Button -->
-    <Button
-        android:id="@+id/registerButton"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_centerHorizontal="true"
-        android:layout_below="@id/confirmPasswordEditText"
-        android:layout_marginTop="24dp"
-        android:text="Register"
-        android:backgroundTint="#C61205" />
+            android:layout_centerHorizontal="true"
+            android:layout_below="@id/stateEditText"
+            android:layout_marginTop="24dp"
+            android:text="Register"
+            android:backgroundTint="#C61205" />
+        </RelativeLayout>
+    </ScrollView>
 </RelativeLayout>
+
+
 
 

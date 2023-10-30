@@ -35,6 +35,11 @@ public class RegistrationActivity extends AppCompatActivity {
     private EditText phoneEditText;
     private EditText passwordEditText;
     private EditText confirmPasswordEditText;
+    private EditText addressLine1EditText;
+    private EditText addressLine2EditText;
+    private EditText districtEditText;
+    private EditText postcodeEditText;
+    private EditText stateEditText;
     private Button registerButton;
 
     private FirebaseAuth mAuth;
@@ -64,6 +69,11 @@ public class RegistrationActivity extends AppCompatActivity {
         phoneEditText = findViewById(R.id.phoneEditText);
         passwordEditText = findViewById(R.id.passwordEditText);
         confirmPasswordEditText = findViewById(R.id.confirmPasswordEditText);
+        addressLine1EditText = findViewById(R.id.addressLine1EditText);
+        addressLine2EditText = findViewById(R.id.addressLine2EditText);
+        districtEditText = findViewById(R.id.districtEditText);
+        postcodeEditText = findViewById(R.id.postcodeEditText);
+        stateEditText = findViewById(R.id.stateEditText);
         registerButton = findViewById(R.id.registerButton);
 
         radioGroup.setOnCheckedChangeListener(new RadioGroup.OnCheckedChangeListener() {
@@ -87,9 +97,14 @@ public class RegistrationActivity extends AppCompatActivity {
                 String phone = phoneEditText.getText().toString();
                 String password = passwordEditText.getText().toString();
                 String confirmPassword = confirmPasswordEditText.getText().toString();
+                String addressLine1 = addressLine1EditText.getText().toString();
+                String addressLine2 = addressLine2EditText.getText().toString();
+                String district = districtEditText.getText().toString();
+                String postcode = postcodeEditText.getText().toString();
+                String state = stateEditText.getText().toString();
 
                 if (validateInput(fullName, email, phone, password, confirmPassword)) {
-                    registerUser(email, password, selectedType, companyName, fullName, phone);
+                    registerUser(email, password, selectedType, companyName, fullName, phone, addressLine1, addressLine2, district, postcode, state);
                 }
             }
         });
@@ -130,8 +145,7 @@ public class RegistrationActivity extends AppCompatActivity {
         return true;
     }
 
-
-    private void registerUser(String email, String password, String selectedType, String companyName, String fullName, String phone) {
+    private void registerUser(String email, String password, String selectedType, String companyName, String fullName, String phone, String addressLine1, String addressLine2, String district, String postcode, String state) {
         mAuth.createUserWithEmailAndPassword(email, password)
                 .addOnCompleteListener(this, new OnCompleteListener<AuthResult>() {
                     @Override
@@ -142,7 +156,7 @@ public class RegistrationActivity extends AppCompatActivity {
                                 String userId = currentUser.getUid();
 
                                 // Create a User object to store user data
-                                User newUser = new User(selectedType, companyName, fullName, email, phone);
+                                User newUser = new User(selectedType, companyName, fullName, email, phone, addressLine1, addressLine2, district, postcode, state);
 
                                 // Save the user data in the Realtime Database under the generated user ID
                                 databaseReference.child(userId).setValue(newUser)
@@ -177,26 +191,33 @@ public class RegistrationActivity extends AppCompatActivity {
                 });
     }
 
-
-
-
     public class User {
         private String userType;
         private String companyName;
         private String fullName;
         private String email;
         private String phone;
+        private String addressLine1;
+        private String addressLine2;
+        private String district;
+        private String postcode;
+        private String state;
 
         public User() {
             // Default constructor required for calls to DataSnapshot.getValue(User.class)
         }
 
-        public User(String userType, String companyName, String fullName, String email, String phone) {
+        public User(String userType, String companyName, String fullName, String email, String phone, String addressLine1, String addressLine2, String district, String postcode, String state) {
             this.userType = userType;
             this.companyName = companyName;
             this.fullName = fullName;
             this.email = email;
             this.phone = phone;
+            this.addressLine1 = addressLine1;
+            this.addressLine2 = addressLine2;
+            this.district = district;
+            this.postcode = postcode;
+            this.state = state;
         }
 
         public String getUserType() {
@@ -218,7 +239,28 @@ public class RegistrationActivity extends AppCompatActivity {
         public String getPhone() {
             return phone;
         }
-    }
 
+        public String getAddressLine1() {
+            return addressLine1;
+        }
+
+        public String getAddressLine2() {
+            return addressLine2;
+        }
+
+        public String getDistrict() {
+            return district;
+        }
+
+        public String getPostcode() {
+            return postcode;
+        }
+
+        public String getState() {
+            return state;
+        }
+    }
 }
+
+
 

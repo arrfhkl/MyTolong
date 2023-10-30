@@ -26,6 +26,11 @@ public class ProviderProfileFragment extends Fragment {
     private TextView emailTextView;
     private TextView fullNameTextView; // New TextView for Full Name
     private TextView typeTextView; // New TextView for Type (Company or Individual)
+    private TextView addressLine1TextView; // New TextView for Address Line 1
+    private TextView addressLine2TextView; // New TextView for Address Line 2
+    private TextView districtTextView; // New TextView for District
+    private TextView postcodeTextView; // New TextView for Postcode
+    private TextView stateTextView; // New TextView for State
     private Button editProfileButton;
 
     // Initialize Firebase Realtime Database and Firebase Authentication
@@ -43,6 +48,11 @@ public class ProviderProfileFragment extends Fragment {
         emailTextView = view.findViewById(R.id.emailTextView);
         fullNameTextView = view.findViewById(R.id.fullNameTextView); // Initialize Full Name TextView
         typeTextView = view.findViewById(R.id.typeTextView); // Initialize Type TextView
+        addressLine1TextView = view.findViewById(R.id.addressLine1TextView); // Initialize Address Line 1 TextView
+        addressLine2TextView = view.findViewById(R.id.addressLine2TextView); // Initialize Address Line 2 TextView
+        districtTextView = view.findViewById(R.id.districtTextView); // Initialize District TextView
+        postcodeTextView = view.findViewById(R.id.postcodeTextView); // Initialize Postcode TextView
+        stateTextView = view.findViewById(R.id.stateTextView); // Initialize State TextView
         editProfileButton = view.findViewById(R.id.editProfileButton);
 
         // Initialize Firebase Realtime Database and Firebase Authentication
@@ -64,6 +74,11 @@ public class ProviderProfileFragment extends Fragment {
                     String email = mAuth.getCurrentUser().getEmail();
                     String fullName = dataSnapshot.child("fullName").getValue(String.class);
                     String userType = dataSnapshot.child("userType").getValue(String.class);
+                    String addressLine1 = dataSnapshot.child("addressLine1").getValue(String.class);
+                    String addressLine2 = dataSnapshot.child("addressLine2").getValue(String.class);
+                    String district = dataSnapshot.child("district").getValue(String.class);
+                    String postcode = dataSnapshot.child("postcode").getValue(String.class);
+                    String state = dataSnapshot.child("state").getValue(String.class);
 
                     // Update the UI elements with Realtime Database data
                     companyNameTextView.setText(companyName);
@@ -71,6 +86,11 @@ public class ProviderProfileFragment extends Fragment {
                     emailTextView.setText(email);
                     fullNameTextView.setText(fullName); // Display Full Name
                     typeTextView.setText(userType); // Display Type (Company or Individual)
+                    addressLine1TextView.setText(addressLine1); // Display Address Line 1
+                    addressLine2TextView.setText(addressLine2); // Display Address Line 2
+                    districtTextView.setText(district); // Display District
+                    postcodeTextView.setText(postcode); // Display Postcode
+                    stateTextView.setText(state); // Display State
                 } else {
                     // Handle the case where the data doesn't exist
                 }
@@ -95,6 +115,7 @@ public class ProviderProfileFragment extends Fragment {
         return view;
     }
 }
+
 
 
 
