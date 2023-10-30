@@ -3,10 +3,123 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent">
 
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical">
+
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+
+            <!-- Company Name -->
+
+
+            <TextView
+                android:id="@+id/companyNameText"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="16dp"
+                android:text="Company Name"
+                android:textSize="18sp" />
+
+            <!-- Full Name -->
+            <TextView
+                android:id="@+id/fullNameText"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_below="@id/companyNameText"
+                android:layout_marginTop="8dp"
+                android:text="Full Name"
+                android:textSize="18sp" />
+
+            <!-- Type (Company or Individual) -->
+            <TextView
+                android:id="@+id/typeText"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_below="@id/fullNameText"
+                android:layout_marginTop="8dp"
+                android:text="Type"
+                android:textSize="18sp" />
+
+            <!-- Phone Number -->
+            <TextView
+                android:id="@+id/phoneNumberText"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_below="@id/typeText"
+                android:layout_marginTop="8dp"
+                android:text="Phone Number"
+                android:textSize="18sp" />
+
+            <!-- Email -->
+            <TextView
+                android:id="@+id/emailText"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_below="@id/phoneNumberText"
+                android:layout_marginTop="8dp"
+                android:text="Email"
+                android:textSize="18sp" />
+
+            <!-- Address Line 1 -->
+            <TextView
+                android:id="@+id/addressLine1Text"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_below="@id/emailText"
+                android:layout_marginTop="8dp"
+                android:text="Address Line 1"
+                android:textSize="18sp" />
+
+            <!-- Address Line 2 -->
+            <TextView
+                android:id="@+id/addressLine2Text"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_below="@id/addressLine1Text"
+                android:layout_marginTop="8dp"
+                android:text="Address Line 2"
+                android:textSize="18sp" />
+
+            <!-- District -->
+            <TextView
+                android:id="@+id/districtText"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_below="@id/addressLine2Text"
+                android:layout_marginTop="8dp"
+                android:text="District"
+                android:textSize="18sp" />
+
+            <!-- Postcode -->
+            <TextView
+                android:id="@+id/postcodeText"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_below="@id/districtText"
+                android:layout_marginTop="8dp"
+                android:text="Postcode"
+                android:textSize="18sp" />
+
+            <!-- State -->
+            <TextView
+                android:id="@+id/stateText"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_below="@id/postcodeText"
+                android:layout_marginTop="8dp"
+                android:text="State"
+                android:textSize="18sp" />
+
+            <!-- Edit Button -->
+        </RelativeLayout>
+
         <RelativeLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_gravity="center_vertical">
+            >
 
             <!-- Company Name -->
 
@@ -130,4 +243,6 @@
                 android:text="Edit Profile"
                 android:backgroundTint="#F44336" />
         </RelativeLayout>
+
+    </LinearLayout>
     </ScrollView>
