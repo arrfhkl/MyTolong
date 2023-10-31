@@ -142,6 +142,7 @@
                 android:layout_centerHorizontal="true"
                 android:layout_marginTop="16dp"
                 android:text="Company Name"
+                android:textStyle="bold"
                 android:textSize="18sp" />
 
             <!-- Full Name -->
@@ -153,6 +154,7 @@
                 android:layout_centerHorizontal="true"
                 android:layout_marginTop="8dp"
                 android:text="Full Name"
+                android:textStyle="bold"
                 android:textSize="18sp" />
 
             <!-- Type (Company or Individual) -->
@@ -164,6 +166,7 @@
                 android:layout_centerHorizontal="true"
                 android:layout_marginTop="8dp"
                 android:text="Type"
+                android:textStyle="bold"
                 android:textSize="18sp" />
 
             <!-- Phone Number -->
@@ -175,6 +178,7 @@
                 android:layout_centerHorizontal="true"
                 android:layout_marginTop="8dp"
                 android:text="Phone Number"
+                android:textStyle="bold"
                 android:textSize="18sp" />
 
             <!-- Email -->
@@ -186,6 +190,7 @@
                 android:layout_centerHorizontal="true"
                 android:layout_marginTop="8dp"
                 android:text="Email"
+                android:textStyle="bold"
                 android:textSize="18sp" />
 
             <!-- Address Line 1 -->
@@ -197,6 +202,7 @@
                 android:layout_centerHorizontal="true"
                 android:layout_marginTop="8dp"
                 android:text="Address Line 1"
+                android:textStyle="bold"
                 android:textSize="18sp" />
 
             <!-- Address Line 2 -->
@@ -208,6 +214,7 @@
                 android:layout_centerHorizontal="true"
                 android:layout_marginTop="8dp"
                 android:text="Address Line 2"
+                android:textStyle="bold"
                 android:textSize="18sp" />
 
             <!-- District -->
@@ -219,6 +226,7 @@
                 android:layout_centerHorizontal="true"
                 android:layout_marginTop="8dp"
                 android:text="District"
+                android:textStyle="bold"
                 android:textSize="18sp" />
 
             <!-- Postcode -->
@@ -230,6 +238,7 @@
                 android:layout_centerHorizontal="true"
                 android:layout_marginTop="8dp"
                 android:text="Postcode"
+                android:textStyle="bold"
                 android:textSize="18sp" />
 
             <!-- State -->
@@ -241,6 +250,7 @@
                 android:layout_centerHorizontal="true"
                 android:layout_marginTop="8dp"
                 android:text="State"
+                android:textStyle="bold"
                 android:textSize="18sp" />
 
             <!-- Edit Button -->
