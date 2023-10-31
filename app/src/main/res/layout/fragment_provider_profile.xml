@@ -5,8 +5,7 @@
 
     <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        >
+        android:layout_height="wrap_content">
 
         <RelativeLayout
             android:layout_width="wrap_content"
@@ -274,6 +273,18 @@
                 android:layout_marginTop="16dp"
                 android:text="Edit Profile"
                 android:backgroundTint="#F44336" />
+
+            <Button
+                android:id="@+id/logoutBtn"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_below="@id/editProfileButton"
+                android:layout_centerHorizontal="true"
+                android:layout_marginTop="16dp"
+                android:text="Logout"
+                android:backgroundTint="#F44336" />
+
+
         </RelativeLayout>
 
 

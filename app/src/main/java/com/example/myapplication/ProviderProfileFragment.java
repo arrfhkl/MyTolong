@@ -33,6 +33,7 @@ public class ProviderProfileFragment extends Fragment {
     private FirebaseAuth mAuth;
     private FirebaseFirestore firestore;
     private ListenerRegistration userSnapshotListener;
+    private Button logoutButton;
 
     @Nullable
     @Override
@@ -50,6 +51,7 @@ public class ProviderProfileFragment extends Fragment {
         postcodeTextView = view.findViewById(R.id.postcodeTextView);
         stateTextView = view.findViewById(R.id.stateTextView);
         editProfileButton = view.findViewById(R.id.editProfileButton);
+        logoutButton = view.findViewById(R.id.logoutBtn);
 
         mAuth = FirebaseAuth.getInstance();
         firestore = FirebaseFirestore.getInstance();
@@ -101,6 +103,19 @@ public class ProviderProfileFragment extends Fragment {
                 // Create an intent to start the ProfileEditActivity
                 Intent intent = new Intent(getActivity(), ProfileEditActivity.class);
                 startActivity(intent);
+            }
+        });
+
+        logoutButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                // Sign out the current user
+                mAuth.signOut();
+
+                // Redirect to the login or sign-in activity
+                Intent intent = new Intent(getActivity(), MainActivity.class); // Replace with the appropriate activity
+                startActivity(intent);
+                requireActivity().finish(); // Close the parent activity
             }
         });
 
