@@ -1,6 +1,5 @@
 package com.example.myapplication;
 
-import android.annotation.SuppressLint;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
@@ -21,8 +20,8 @@ import com.google.firebase.FirebaseApp;
 import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
-import com.google.firebase.database.DatabaseReference;
-import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.firestore.DocumentReference;
+import com.google.firebase.firestore.FirebaseFirestore;
 
 public class RegistrationActivity extends AppCompatActivity {
 
@@ -43,9 +42,8 @@ public class RegistrationActivity extends AppCompatActivity {
     private Button registerButton;
 
     private FirebaseAuth mAuth;
-    private DatabaseReference databaseReference;
+    private FirebaseFirestore firestore;
 
-    @SuppressLint("MissingInflatedId")
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -56,9 +54,8 @@ public class RegistrationActivity extends AppCompatActivity {
         // Initialize Firebase Authentication
         mAuth = FirebaseAuth.getInstance();
 
-        // Initialize Firebase Realtime Database
-        FirebaseDatabase database = FirebaseDatabase.getInstance();
-        databaseReference = database.getReference("users");
+        // Initialize Firestore
+        firestore = FirebaseFirestore.getInstance();
 
         radioGroup = findViewById(R.id.radioGroup);
         radioCompany = findViewById(R.id.radioCompany);
@@ -158,12 +155,13 @@ public class RegistrationActivity extends AppCompatActivity {
                                 // Create a User object to store user data
                                 User newUser = new User(selectedType, companyName, fullName, email, phone, addressLine1, addressLine2, district, postcode, state);
 
-                                // Save the user data in the Realtime Database under the generated user ID
-                                databaseReference.child(userId).setValue(newUser)
+                                // Save the user data in Firestore under the generated user ID
+                                DocumentReference userRef = firestore.collection("user").document(userId);
+                                userRef.set(newUser)
                                         .addOnSuccessListener(new OnSuccessListener<Void>() {
                                             @Override
                                             public void onSuccess(Void aVoid) {
-                                                // User data added to Realtime Database successfully
+                                                // User data added to Firestore successfully
 
                                                 // You can add a success message or navigate to the next screen here
                                                 // For example:
@@ -178,8 +176,8 @@ public class RegistrationActivity extends AppCompatActivity {
                                         .addOnFailureListener(new OnFailureListener() {
                                             @Override
                                             public void onFailure(@NonNull Exception e) {
-                                                // Error adding user data to Realtime Database
-                                                Toast.makeText(RegistrationActivity.this, "Error saving user data in Realtime Database.", Toast.LENGTH_SHORT).show();
+                                                // Error adding user data to Firestore
+                                                Toast.makeText(RegistrationActivity.this, "Error saving user data in Firestore.", Toast.LENGTH_SHORT).show();
                                             }
                                         });
                             }
@@ -204,7 +202,7 @@ public class RegistrationActivity extends AppCompatActivity {
         private String state;
 
         public User() {
-            // Default constructor required for calls to DataSnapshot.getValue(User.class)
+            // Default constructor required for Firestore
         }
 
         public User(String userType, String companyName, String fullName, String email, String phone, String addressLine1, String addressLine2, String district, String postcode, String state) {
@@ -261,6 +259,7 @@ public class RegistrationActivity extends AppCompatActivity {
         }
     }
 }
+
 
 
 
