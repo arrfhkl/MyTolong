@@ -16,7 +16,6 @@
 
             <!-- Company Name -->
 
-
             <TextView
                 android:id="@+id/companyNameText"
                 android:layout_width="wrap_content"
