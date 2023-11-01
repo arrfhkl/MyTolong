@@ -75,6 +75,7 @@ public class RegistrationActivity extends AppCompatActivity {
     private StorageReference storageRef;
     private static final int PICK_IMAGE_REQUEST = 1;
     private Uri imageUri; // This variable will store the selected image URI
+    private Uri vehicleImageUri;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -171,6 +172,7 @@ public class RegistrationActivity extends AppCompatActivity {
         super.onActivityResult(requestCode, resultCode, data);
         if (requestCode == PICK_IMAGE_REQUEST && resultCode == RESULT_OK && data != null) {
             imageUri = data.getData(); // This is the URI of the selected image
+            vehicleImageUri = data.getData();
             // Now you can use the imageUri as needed, such as displaying the image or uploading it.
         }
     }
@@ -266,6 +268,13 @@ public class RegistrationActivity extends AppCompatActivity {
                     if (currentUser != null) {
                         String userId = currentUser.getUid();
                         User newUser = new User(selectedType, companyName, fullName, email, phone, address);
+
+                        // Upload identity card image with the user's UID
+                        uploadImage("identity_card", imageUri, userId, "identity_card");
+
+                        // Upload vehicle license image with the user's UID
+                        uploadImage("vehicle_license", vehicleImageUri, userId, "vehicle_license");
+
                         DocumentReference userRef = firestore.collection("user").document(userId);
                         userRef.set(newUser).addOnSuccessListener(new OnSuccessListener<Void>() {
                             @Override
@@ -289,25 +298,20 @@ public class RegistrationActivity extends AppCompatActivity {
         });
     }
 
-    private void uploadImage(String imageType) {
-        if (checkLocationPermission()) {
-            // Implement the image upload logic using Firebase Storage
-            // For example, you can create a unique file name using UUID
+    private void uploadImage(String imageType, Uri imageUri, String userId, String field) {
+        if (imageUri != null) {
             String uniqueFilename = UUID.randomUUID().toString();
-            StorageReference imageRef = storageRef.child("images/" + imageType + "/" + uniqueFilename);
+            StorageReference imageRef = storageRef.child("images/" + imageType + "/" + userId + "/" + uniqueFilename);
 
-            // Get the download URL after a successful upload
-            imageRef.putFile(Uri.parse("Path:/storage/emulated/0/Pictures/IMG_20231101_032426.jpg"))
+            imageRef.putFile(imageUri)
                     .addOnSuccessListener(taskSnapshot -> {
-                        // Get the download URL
                         imageRef.getDownloadUrl()
                                 .addOnSuccessListener(uri -> {
                                     String downloadUrl = uri.toString();
 
                                     // Save the download URL in Firestore
-                                    String userId = mAuth.getCurrentUser().getUid();
                                     DocumentReference userRef = firestore.collection("user").document(userId);
-                                    userRef.update(imageType, downloadUrl)
+                                    userRef.update(field, downloadUrl)
                                             .addOnSuccessListener(aVoid -> {
                                                 Toast.makeText(RegistrationActivity.this, "Image uploaded successfully.", Toast.LENGTH_SHORT).show();
                                                 loadImages(); // Reload images to display the newly uploaded image
