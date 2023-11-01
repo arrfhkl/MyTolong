@@ -24,10 +24,6 @@ public class ProviderProfileFragment extends Fragment {
     private TextView fullNameTextView;
     private TextView typeTextView;
     private TextView addressLine1TextView;
-    private TextView addressLine2TextView;
-    private TextView districtTextView;
-    private TextView postcodeTextView;
-    private TextView stateTextView;
     private Button editProfileButton;
 
     private FirebaseAuth mAuth;
@@ -46,10 +42,6 @@ public class ProviderProfileFragment extends Fragment {
         fullNameTextView = view.findViewById(R.id.fullNameTextView);
         typeTextView = view.findViewById(R.id.typeTextView);
         addressLine1TextView = view.findViewById(R.id.addressLine1TextView);
-        addressLine2TextView = view.findViewById(R.id.addressLine2TextView);
-        districtTextView = view.findViewById(R.id.districtTextView);
-        postcodeTextView = view.findViewById(R.id.postcodeTextView);
-        stateTextView = view.findViewById(R.id.stateTextView);
         editProfileButton = view.findViewById(R.id.editProfileButton);
         logoutButton = view.findViewById(R.id.logoutBtn);
 
@@ -74,11 +66,7 @@ public class ProviderProfileFragment extends Fragment {
                         String email = mAuth.getCurrentUser().getEmail();
                         String fullName = documentSnapshot.getString("fullName");
                         String userType = documentSnapshot.getString("userType");
-                        String addressLine1 = documentSnapshot.getString("addressLine1");
-                        String addressLine2 = documentSnapshot.getString("addressLine2");
-                        String district = documentSnapshot.getString("district");
-                        String postcode = documentSnapshot.getString("postcode");
-                        String state = documentSnapshot.getString("state");
+                        String addressLine1 = documentSnapshot.getString("address");
 
                         // Update the UI elements with Firestore data
                         companyNameTextView.setText(companyName);
@@ -87,10 +75,7 @@ public class ProviderProfileFragment extends Fragment {
                         fullNameTextView.setText(fullName);
                         typeTextView.setText(userType);
                         addressLine1TextView.setText(addressLine1);
-                        addressLine2TextView.setText(addressLine2);
-                        districtTextView.setText(district);
-                        postcodeTextView.setText(postcode);
-                        stateTextView.setText(state);
+
                     } else {
                         // Handle the case where the data doesn't exist
                     }

@@ -1,6 +1,11 @@
 package com.example.myapplication;
 
+import android.Manifest;
 import android.content.Intent;
+import android.content.pm.PackageManager;
+import android.location.Address;
+import android.location.Geocoder;
+import android.location.Location;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
@@ -11,19 +16,31 @@ import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.core.app.ActivityCompat;
+import androidx.core.content.ContextCompat;
 
+import com.google.android.gms.location.FusedLocationProviderClient;
+import com.google.android.gms.location.LocationCallback;
+import com.google.android.gms.location.LocationRequest;
+import com.google.android.gms.location.LocationResult;
+import com.google.android.gms.location.LocationServices;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
-import com.google.firebase.FirebaseApp;
 import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.FirebaseFirestore;
 
+import java.io.IOException;
+import java.util.List;
+import java.util.Locale;
+
 public class RegistrationActivity extends AppCompatActivity {
+
+    private static final int LOCATION_PERMISSION_REQUEST_CODE = 1;
 
     private RadioGroup radioGroup;
     private RadioButton radioCompany;
@@ -34,28 +51,23 @@ public class RegistrationActivity extends AppCompatActivity {
     private EditText phoneEditText;
     private EditText passwordEditText;
     private EditText confirmPasswordEditText;
-    private EditText addressLine1EditText;
-    private EditText addressLine2EditText;
-    private EditText districtEditText;
-    private EditText postcodeEditText;
-    private EditText stateEditText;
+    private EditText addressEditText;  // Combined address field
     private Button registerButton;
+    private Button getLocationButton;  // Button to get location and fill address
 
     private FirebaseAuth mAuth;
     private FirebaseFirestore firestore;
+    private FusedLocationProviderClient fusedLocationClient;
+    private LocationCallback locationCallback;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_registration);
 
-        FirebaseApp.initializeApp(this);
-
-        // Initialize Firebase Authentication
         mAuth = FirebaseAuth.getInstance();
-
-        // Initialize Firestore
         firestore = FirebaseFirestore.getInstance();
+        fusedLocationClient = LocationServices.getFusedLocationProviderClient(this);
 
         radioGroup = findViewById(R.id.radioGroup);
         radioCompany = findViewById(R.id.radioCompany);
@@ -66,12 +78,19 @@ public class RegistrationActivity extends AppCompatActivity {
         phoneEditText = findViewById(R.id.phoneEditText);
         passwordEditText = findViewById(R.id.passwordEditText);
         confirmPasswordEditText = findViewById(R.id.confirmPasswordEditText);
-        addressLine1EditText = findViewById(R.id.addressLine1EditText);
-        addressLine2EditText = findViewById(R.id.addressLine2EditText);
-        districtEditText = findViewById(R.id.districtEditText);
-        postcodeEditText = findViewById(R.id.postcodeEditText);
-        stateEditText = findViewById(R.id.stateEditText);
+        addressEditText = findViewById(R.id.editTextLocation);
         registerButton = findViewById(R.id.registerButton);
+        getLocationButton = findViewById(R.id.btnGetLocation);
+
+        getLocationButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if (checkLocationPermission()) {
+                    // Request location updates
+                    startLocationUpdates();
+                }
+            }
+        });
 
         radioGroup.setOnCheckedChangeListener(new RadioGroup.OnCheckedChangeListener() {
             @Override
@@ -94,17 +113,79 @@ public class RegistrationActivity extends AppCompatActivity {
                 String phone = phoneEditText.getText().toString();
                 String password = passwordEditText.getText().toString();
                 String confirmPassword = confirmPasswordEditText.getText().toString();
-                String addressLine1 = addressLine1EditText.getText().toString();
-                String addressLine2 = addressLine2EditText.getText().toString();
-                String district = districtEditText.getText().toString();
-                String postcode = postcodeEditText.getText().toString();
-                String state = stateEditText.getText().toString();
+                String address = addressEditText.getText().toString();
 
                 if (validateInput(fullName, email, phone, password, confirmPassword)) {
-                    registerUser(email, password, selectedType, companyName, fullName, phone, addressLine1, addressLine2, district, postcode, state);
+                    registerUser(email, password, selectedType, companyName, fullName, phone, address);
                 }
             }
         });
+
+        createLocationCallback();
+    }
+
+    private boolean checkLocationPermission() {
+        if (ContextCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION)
+                != PackageManager.PERMISSION_GRANTED) {
+            ActivityCompat.requestPermissions(this,
+                    new String[]{Manifest.permission.ACCESS_FINE_LOCATION},
+                    LOCATION_PERMISSION_REQUEST_CODE);
+            return false;
+        }
+        return true;
+    }
+
+    private void startLocationUpdates() {
+        LocationRequest locationRequest = LocationRequest.create();
+        locationRequest.setPriority(LocationRequest.PRIORITY_HIGH_ACCURACY);
+        locationRequest.setInterval(10000); // 10 seconds
+
+        if (ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
+            // TODO: Consider calling
+            //    ActivityCompat#requestPermissions
+            // here to request the missing permissions, and then overriding
+            //   public void onRequestPermissionsResult(int requestCode, String[] permissions,
+            //                                          int[] grantResults)
+            // to handle the case where the user grants the permission. See the documentation
+            // for ActivityCompat#requestPermissions for more details.
+            return;
+        }
+        fusedLocationClient.requestLocationUpdates(locationRequest, locationCallback, null);
+    }
+
+    @Override
+    protected void onPause() {
+        super.onPause();
+        // Stop location updates when the activity is not in the foreground
+        fusedLocationClient.removeLocationUpdates(locationCallback);
+    }
+
+    private void createLocationCallback() {
+        locationCallback = new LocationCallback() {
+            @Override
+            public void onLocationResult(LocationResult locationResult) {
+                if (locationResult != null) {
+                    Location location = locationResult.getLastLocation();
+                    if (location != null) {
+                        updateAddressFromLocation(location);
+                    }
+                }
+            }
+        };
+    }
+
+    private void updateAddressFromLocation(Location location) {
+        Geocoder geocoder = new Geocoder(this, Locale.getDefault());
+        try {
+            List<Address> addresses = geocoder.getFromLocation(location.getLatitude(), location.getLongitude(), 1);
+            if (addresses != null && addresses.size() > 0) {
+                Address address = addresses.get(0);
+                String addressText = address.getAddressLine(0);  // Get the first line of the address
+                addressEditText.setText(addressText);
+            }
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
     }
 
     private boolean validateInput(String fullName, String email, String phone, String password, String confirmPassword) {
@@ -142,7 +223,7 @@ public class RegistrationActivity extends AppCompatActivity {
         return true;
     }
 
-    private void registerUser(String email, String password, String selectedType, String companyName, String fullName, String phone, String addressLine1, String addressLine2, String district, String postcode, String state) {
+    private void registerUser(String email, String password, String selectedType, String companyName, String fullName, String phone, String address) {
         mAuth.createUserWithEmailAndPassword(email, password)
                 .addOnCompleteListener(this, new OnCompleteListener<AuthResult>() {
                     @Override
@@ -153,7 +234,7 @@ public class RegistrationActivity extends AppCompatActivity {
                                 String userId = currentUser.getUid();
 
                                 // Create a User object to store user data
-                                User newUser = new User(selectedType, companyName, fullName, email, phone, addressLine1, addressLine2, district, postcode, state);
+                                User newUser = new User(selectedType, companyName, fullName, email, phone, address);
 
                                 // Save the user data in Firestore under the generated user ID
                                 DocumentReference userRef = firestore.collection("user").document(userId);
@@ -195,27 +276,19 @@ public class RegistrationActivity extends AppCompatActivity {
         private String fullName;
         private String email;
         private String phone;
-        private String addressLine1;
-        private String addressLine2;
-        private String district;
-        private String postcode;
-        private String state;
+        private String address;
 
         public User() {
             // Default constructor required for Firestore
         }
 
-        public User(String userType, String companyName, String fullName, String email, String phone, String addressLine1, String addressLine2, String district, String postcode, String state) {
+        public User(String userType, String companyName, String fullName, String email, String phone, String address) {
             this.userType = userType;
             this.companyName = companyName;
             this.fullName = fullName;
             this.email = email;
             this.phone = phone;
-            this.addressLine1 = addressLine1;
-            this.addressLine2 = addressLine2;
-            this.district = district;
-            this.postcode = postcode;
-            this.state = state;
+            this.address = address;
         }
 
         public String getUserType() {
@@ -238,27 +311,12 @@ public class RegistrationActivity extends AppCompatActivity {
             return phone;
         }
 
-        public String getAddressLine1() {
-            return addressLine1;
-        }
-
-        public String getAddressLine2() {
-            return addressLine2;
-        }
-
-        public String getDistrict() {
-            return district;
-        }
-
-        public String getPostcode() {
-            return postcode;
-        }
-
-        public String getState() {
-            return state;
+        public String getAddress() {
+            return address;
         }
     }
 }
+
 
 
 

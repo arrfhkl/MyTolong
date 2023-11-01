@@ -81,58 +81,12 @@
                 android:layout_height="wrap_content"
                 android:layout_below="@id/emailText"
                 android:layout_marginTop="8dp"
-                android:text="Address Line 1:"
+                android:text="Address:"
                 android:textColor="@color/black"
                 android:textSize="18sp"
                 android:background="#FF9800"/>
 
             <!-- Address Line 2 -->
-            <TextView
-                android:id="@+id/addressLine2Text"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_below="@id/addressLine1Text"
-                android:layout_marginTop="8dp"
-                android:text="Address Line 2:"
-                android:textColor="@color/black"
-                android:textSize="18sp"
-                android:background="#FF9800"/>
-
-            <!-- District -->
-            <TextView
-                android:id="@+id/districtText"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_below="@id/addressLine2Text"
-                android:layout_marginTop="8dp"
-                android:text="District:"
-                android:textColor="@color/black"
-                android:textSize="18sp"
-                android:background="#FF9800"/>
-
-            <!-- Postcode -->
-            <TextView
-                android:id="@+id/postcodeText"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_below="@id/districtText"
-                android:layout_marginTop="8dp"
-                android:text="Postcode:"
-                android:textColor="@color/black"
-                android:textSize="18sp"
-                android:background="#FF9800"/>
-
-            <!-- State -->
-            <TextView
-                android:id="@+id/stateText"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_below="@id/postcodeText"
-                android:layout_marginTop="8dp"
-                android:text="State:"
-                android:textColor="@color/black"
-                android:textSize="18sp"
-                android:background="#FF9800"/>
 
             <!-- Edit Button -->
         </RelativeLayout>
@@ -211,64 +165,18 @@
                 android:layout_below="@id/emailTextView"
                 android:layout_centerHorizontal="true"
                 android:layout_marginTop="8dp"
-                android:text="Address Line 1"
+                android:text="Address"
                 android:textStyle="bold"
                 android:textSize="18sp" />
 
             <!-- Address Line 2 -->
-            <TextView
-                android:id="@+id/addressLine2TextView"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_below="@id/addressLine1TextView"
-                android:layout_centerHorizontal="true"
-                android:layout_marginTop="8dp"
-                android:text="Address Line 2"
-                android:textStyle="bold"
-                android:textSize="18sp" />
-
-            <!-- District -->
-            <TextView
-                android:id="@+id/districtTextView"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_below="@id/addressLine2TextView"
-                android:layout_centerHorizontal="true"
-                android:layout_marginTop="8dp"
-                android:text="District"
-                android:textStyle="bold"
-                android:textSize="18sp" />
-
-            <!-- Postcode -->
-            <TextView
-                android:id="@+id/postcodeTextView"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_below="@id/districtTextView"
-                android:layout_centerHorizontal="true"
-                android:layout_marginTop="8dp"
-                android:text="Postcode"
-                android:textStyle="bold"
-                android:textSize="18sp" />
-
-            <!-- State -->
-            <TextView
-                android:id="@+id/stateTextView"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_below="@id/postcodeTextView"
-                android:layout_centerHorizontal="true"
-                android:layout_marginTop="8dp"
-                android:text="State"
-                android:textStyle="bold"
-                android:textSize="18sp" />
 
             <!-- Edit Button -->
             <Button
                 android:id="@+id/editProfileButton"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_below="@id/stateTextView"
+                android:layout_below="@id/addressLine1TextView"
                 android:layout_centerHorizontal="true"
                 android:layout_marginTop="16dp"
                 android:text="Edit Profile"

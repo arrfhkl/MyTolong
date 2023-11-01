@@ -112,64 +112,26 @@
             android:layout_marginTop="16dp" />
 
         <!-- Address Line 1 -->
-        <EditText
-            android:id="@+id/addressLine1EditText"
-            android:layout_width="300dp"
-            android:layout_height="45dp"
-            android:layout_centerHorizontal="true"
-            android:textAlignment="center"
-            android:hint="Address Line 1"
-            android:background="#EFDBBC"
-            android:layout_below="@id/confirmPasswordEditText"
-            android:layout_marginTop="16dp" />
+            <EditText
+                android:id="@+id/editTextLocation"
+                android:layout_width="300dp"
+                android:layout_height="45dp"
+                android:layout_below="@id/confirmPasswordEditText"
+                android:layout_centerInParent="true"
+                android:layout_marginTop="16dp"
+                android:background="#EFDBBC"
+                android:hint="Location"
+                android:textAlignment="center" />
 
-        <!-- Address Line 2 -->
-        <EditText
-            android:id="@+id/addressLine2EditText"
-            android:layout_width="300dp"
-            android:layout_height="45dp"
-            android:layout_centerHorizontal="true"
-            android:textAlignment="center"
-            android:hint="Address Line 2"
-            android:background="#EFDBBC"
-            android:layout_below="@id/addressLine1EditText"
-            android:layout_marginTop="16dp" />
-
-        <!-- District -->
-        <EditText
-            android:id="@+id/districtEditText"
-            android:layout_width="300dp"
-            android:layout_height="45dp"
-            android:layout_centerHorizontal="true"
-            android:textAlignment="center"
-            android:hint="District"
-            android:background="#EFDBBC"
-            android:layout_below="@id/addressLine2EditText"
-            android:layout_marginTop="16dp" />
-
-        <!-- Postcode -->
-        <EditText
-            android:id="@+id/postcodeEditText"
-            android:layout_width="300dp"
-            android:layout_height="45dp"
-            android:layout_centerHorizontal="true"
-            android:textAlignment="center"
-            android:hint="Postcode"
-            android:background="#EFDBBC"
-            android:layout_below="@id/districtEditText"
-            android:layout_marginTop="16dp" />
-
-        <!-- State -->
-        <EditText
-            android:id="@+id/stateEditText"
-            android:layout_width="300dp"
-            android:layout_height="45dp"
-            android:layout_centerHorizontal="true"
-            android:textAlignment="center"
-            android:hint="State"
-            android:background="#EFDBBC"
-            android:layout_below="@id/postcodeEditText"
-            android:layout_marginTop="16dp" />
+                <Button
+                    android:id="@+id/btnGetLocation"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_below="@+id/editTextLocation"
+                    android:layout_centerHorizontal="true"
+                    android:text="Get Location"
+                    android:backgroundTint="#C61205"
+                    />
 
         <!-- Register Button -->
         <Button
@@ -177,7 +139,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_centerHorizontal="true"
-            android:layout_below="@id/stateEditText"
+            android:layout_below="@id/btnGetLocation"
             android:layout_marginTop="24dp"
             android:text="Register"
             android:backgroundTint="#C61205" />
