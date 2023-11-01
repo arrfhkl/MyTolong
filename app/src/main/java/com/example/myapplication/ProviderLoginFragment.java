@@ -27,7 +27,6 @@ public class ProviderLoginFragment extends Fragment {
     private Button loginButton;
     private TextView forgotPasswordTextView;
     private TextView registerTextView;
-
     private FirebaseAuth mAuth; // Initialize Firebase Authentication
 
     @SuppressLint("MissingInflatedId")
