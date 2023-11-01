@@ -139,10 +139,53 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_centerHorizontal="true"
-            android:layout_below="@id/btnGetLocation"
+            android:layout_below="@id/vehicleLicenseImageView"
             android:layout_marginTop="24dp"
             android:text="Register"
             android:backgroundTint="#C61205" />
+
+            <Button
+                android:id="@+id/uploadIdCardButton"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_centerHorizontal="true"
+                android:layout_below="@id/btnGetLocation"
+                android:layout_marginTop="24dp"
+                android:text="Upload ID Card Photo"
+                android:backgroundTint="#C61205" />
+
+            <ImageView
+                android:id="@+id/identityCardImageView"
+                android:layout_width="400dp"
+                android:layout_height="200dp"
+                android:layout_centerHorizontal="true"
+                android:layout_marginTop="16dp"
+                android:src="@drawable/placeholde_image"
+                android:contentDescription="Identity Card Image"
+                android:layout_below="@id/uploadIdCardButton" />
+
+
+            <!-- Vehicle License Upload -->
+            <Button
+                android:id="@+id/uploadLicenseButton"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_centerHorizontal="true"
+                android:layout_below="@id/identityCardImageView"
+                android:layout_marginTop="24dp"
+                android:text="Upload Vehicle License"
+                android:backgroundTint="#C61205" />
+
+            <ImageView
+                android:id="@+id/vehicleLicenseImageView"
+                android:layout_width="400dp"
+                android:layout_height="200dp"
+                android:layout_centerHorizontal="true"
+                android:layout_marginTop="16dp"
+                android:src="@drawable/placeholde_image"
+                android:contentDescription="Vehicle License Image"
+                android:layout_below="@id/uploadLicenseButton" />
+
         </RelativeLayout>
     </ScrollView>
 
